@@ -1,0 +1,80 @@
+#' Function for assembling a SummarizedExperiment object of reference panel for
+#' cell type deconvolution (which is used in \code{decemedip} function)
+#'
+#' @param row_ranges A \code{GRanges} object that contains the genomic coordinates
+#' of \emph{reference regions/sites}.
+#' @param X A matrix that contains the beta values of reference regions. \strong{Each row
+#' is a region and each column is a cell type.} If \code{X} has row names or column names,
+#' the output \code{SummarizedExperiment} object will inherit them.
+#' @param col_names An atomic vector of strings that indicates the column names, i.e.,
+#' names of the cell types. Default is NULL. If not NULL, the column names of \code{X}
+#' will be overwritten by this argument.
+#' @param row_names An atomic vector of strings that indicates the row names, i.e.,
+#' names of the reference regions. Default is NULL. If not NULL, the row names of \code{X}
+#' will be overwritten by this argument.
+#' @param col_data A \code{DataFrame} object that contains metadata for columns (i.e.,
+#' cell types) if specified. Each row in \code{col_data} should contain info of a cell type
+#' in \code{X}. If input is a non-\code{DataFrame} object, it will be converted
+#' to a \code{DataFrame}. Default is NULL.
+#' @param row_data A \code{DataFrame} object that contains metadata for row (i.e.,
+#' reference regions) if specified. Each row in \code{row_data} should contain info of a
+#' reference region in \code{X}. If input is a non-\code{DataFrame} object, it will
+#' be converted to a \code{DataFrame}. Default is NULL.
+#'
+#' @importFrom methods is
+#' @importFrom S4Vectors DataFrame
+#' @importFrom SummarizedExperiment colData<-
+#' @importFrom SummarizedExperiment rowData<-
+#' @importClassesFrom SummarizedExperiment SummarizedExperiment
+#' @importClassesFrom GenomicRanges GRanges
+#'
+#' @return An \code{SummarizedExperiment} object with each row represents a reference region
+#' and an assay named 'X' that stores the beta values of reference regions.
+#' @export
+#'
+#' @examples
+#'
+makeReferencePanel <- function(
+    row_ranges,
+    X,
+    col_names = NULL,
+    row_names = NULL,
+    col_data = NULL,
+    row_data = NULL
+) {
+
+  if (length(row_ranges) != nrow(X)) stop('Length of `row_ranges` is not equal to number of rows in `X`!')
+
+  if (!is.null(col_data) & !methods::is(col_data, 'DataFrame')) {
+    message('col_data is being converted to a DataFrame object.')
+    col_data <- DataFrame(col_data)
+  }
+  if (!is.null(row_data) & !methods::is(row_data, 'DataFrame')) {
+    message('row_data is being converted to a DataFrame object.')
+    row_data <- DataFrame(row_data)
+  }
+  if (!is.null(col_names))
+    stopifnot('The length of `col_names` not equal to number of columns in X.' = length(col_names) == ncol(X))
+  if (!is.null(row_names))
+    stopifnot('The length of `row_names` not equal to number of rows in X.' = length(row_names) == nrow(X))
+  if (!is.null(col_data))
+    stopifnot('The number of rows in col_data not equal to number of columns in X.' = nrow(col_data) == ncol(X))
+  if (!is.null(row_data))
+    stopifnot('The number of rows in row_data not equal to number of rows in X.' = nrow(row_data) == nrow(X))
+
+  if (!is.null(col_names)) colnames(X) <- col_names
+  if (!is.null(row_names)) rownames(X) <- row_names
+
+  se <- SummarizedExperiment::SummarizedExperiment(rowRanges = row_ranges, assays = list(X = X))
+
+  if (!is.null(col_data)) {
+    if (!is.null(col_names)) rownames(col_data) <- col_names
+    colData(se) <- col_data
+  }
+  if (!is.null(row_data)) {
+    if (!is.null(row_names)) rownames(row_data) <- row_names
+    rowData(se) <- row_data
+  }
+
+  return(se)
+}
