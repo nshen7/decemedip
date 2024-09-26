@@ -101,3 +101,4 @@ genome(ref_anc.se) <- "hg19"
 
 hg19.ref.anc.se <- ref_anc.se
 usethis::use_data(hg19.ref.anc.se, overwrite = TRUE)
+usethis::use_data(hg19.ref.anc.se, overwrite = TRUE, internal = TRUE)

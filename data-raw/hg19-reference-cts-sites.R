@@ -130,4 +130,5 @@ genome(ref_cts.se) <- "hg19"
 
 hg19.ref.cts.se <- ref_cts.se
 usethis::use_data(hg19.ref.cts.se, overwrite = TRUE)
+usethis::use_data(hg19.ref.cts.se, overwrite = TRUE, internal = TRUE)
 
