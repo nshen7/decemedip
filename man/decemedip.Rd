@@ -15,7 +15,7 @@ decemedip(
   seed = 2024,
   cores = 4,
   chains = 4,
-  iter = 1000,
+  iter = 2000,
   stan_input_params = list(alpha = rep(1, SummarizedExperiment::ncol(ref_cts)), s_mu = 1,
     s_sigma = 1, n_knot_z = 0, degree_z = 3, Xi =
     cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 1, s_tau = 1),

@@ -13,6 +13,10 @@
 #' samples) if specified. Default is NULL. If not NULL, please make sure that
 #' rows of \code{col_data} corresponds to elements of sample_bam_files. If input is a
 #' non-\code{DataFrame} object, it will be converted to a \code{DataFrame}.
+#' @param row_data A \code{DataFrame} object that contains metadata for rows (i.e.,
+#' genomic regions) if specified. Default is NULL. If not NULL, please make sure that
+#' rows of \code{row_data} corresponds to elements of sample_bam_files. If input is a
+#' non-\code{DataFrame} object, it will be converted to a \code{DataFrame}.
 #' @param bs_genome A character value that indicates the reference genome name as
 #' defined by \code{BSgenome} package. Default is 'BSgenome.Hsapiens.UCSC.hg19'.
 #' @param ... Additional arguments passed into \code{MEDIPS::MEDIPS.createROIset}

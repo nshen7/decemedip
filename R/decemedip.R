@@ -51,7 +51,7 @@ decemedip <- function(
     seed = 2024,
     cores = 4,
     chains = 4,
-    iter = 1000,
+    iter = 2000,
     stan_input_params = list(
       'alpha'     = rep(1, SummarizedExperiment::ncol(ref_cts)),
       's_mu'      = 1,
@@ -120,10 +120,11 @@ decemedip <- function(
   ## Prepare input for stan model
   data_list <- c(list('N' = nrow(X), 'K' = ncol(X), 'y' = y, 'X' = X, 'z' = z), stan_input_params)
 
-  ## Prepare model fitting details
+
   if (diagnostics) {
     model <- stanmodels$decemedip1
   } else {
+    ## Run the stan model that does not generate y_sim
     model <- stanmodels$decemedip0
   }
 
@@ -135,5 +136,5 @@ decemedip <- function(
                                control = stan_control, ...)
 
   ## Return model
-  return(posterior)
+  return(list('data_list' = data_list, 'posterior' = posterior))
 }
