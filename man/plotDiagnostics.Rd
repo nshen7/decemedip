@@ -28,7 +28,8 @@ only. See the argument \code{label_size} in \code{\link[cowplot]{plot_grid}} for
 \item{model_fit_align}{Specifies how graphs in the grid should be aligned. See
 the argument \code{align} in \code{\link[cowplot]{plot_grid}} for details.}
 
-\item{...}{}
+\item{...}{Additional arguments to be fed into \code{\link[cowplot]{plot_grid}}
+in the case of \code{plot_type = 'model_fit'}.}
 }
 \description{
 Diagnostics for model fitting in \code{\link{decemedip}}

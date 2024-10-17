@@ -11,7 +11,11 @@ getSummaryOnPi(
 )
 }
 \arguments{
-\item{digits_summary}{}
+\item{fit}{TODO}
+
+\item{probs}{TODO}
+
+\item{digits_summary}{TODO}
 }
 \description{
 Title

@@ -1,4 +1,4 @@
-#' Perform cell type deconvolution with MeDIP-seq data
+#' Main function to perform cell type deconvolution with MeDIP-seq data
 #'
 #' @param sample_bam_file A string value that indicates the file path to the bam file of a
 #' MeDIP-seq sample of interest. If \code{sample_bam_file} is specified, please do not

@@ -2,7 +2,7 @@
 % Please edit documentation in R/decemedip.R
 \name{decemedip}
 \alias{decemedip}
-\title{Perform cell type deconvolution with MeDIP-seq data}
+\title{Main function to perform cell type deconvolution with MeDIP-seq data}
 \usage{
 decemedip(
   sample_bam_file = NULL,
@@ -70,5 +70,5 @@ Stan. See the details in the documentation for the control argument in \code{\li
 \item{...}{Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.}
 }
 \description{
-Perform cell type deconvolution with MeDIP-seq data
+Main function to perform cell type deconvolution with MeDIP-seq data
 }
