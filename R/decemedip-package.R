@@ -4,6 +4,7 @@
 #'
 #' @docType package
 #' @name decemedip-package
+#' @aliases decemedip-package
 #' @useDynLib decemedip, .registration = TRUE
 #' @import methods
 #' @import Rcpp
@@ -14,5 +15,4 @@
 #' @references
 #' Stan Development Team (NA). RStan: the R interface to Stan. R package version 2.32.6. https://mc-stan.org
 #'
-#' @aliases decemedip-package
-"_PACKAGE"
+NULL
