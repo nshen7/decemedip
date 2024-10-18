@@ -32,12 +32,12 @@ plotDiagnostics <- function(
   if (! 'y_sim' %in% posterior@model_pars)
     stop('In order to get diagnostics, please run decemedip with `diagnostics = TRUE`!')
 
-  if (plot_type != 'y_fit' & plot_type == 'model_fit')
+  if (plot_type != 'y_fit' & plot_type != 'model_fit')
     stop("plot_type has to be 'y_fit' or 'model_fit'!")
 
   y_sim <- as.matrix(posterior, pars = "y_sim")
   smr_pi.df <- rstan::monitor(
-    rstan::extract(fit, pars=c("pi"), permuted = FALSE),
+    rstan::extract(posterior, pars=c("pi"), permuted = FALSE),
     digits_summary = 5,
     print = FALSE
   )
