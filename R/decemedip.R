@@ -105,7 +105,7 @@ decemedip <- function(
 
   ## Check for low coverage or unusual high counts
   if (sum(counts_cts) < 0.25 * length(counts_cts))
-    warning('Unusual low coverage for cell type-specific reference sites!')
+    warning('Unusual low coverage for cell type-specific reference sites!', immediate. = TRUE)
 
   ## Prepare model variables
   y <- c(counts_cts, counts_anc)

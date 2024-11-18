@@ -84,26 +84,37 @@ transformed data {
 }
 
 parameters {
-  vector[L_mu]    w_mu;                 // regression coefficients
-  vector[L_sigma] w_sigma;                 // regression coefficient
+  vector[L_mu]    w_mu_;    // (standard normal) regression coefficients
+  vector[L_sigma] w_sigma_; // (standard normal) regression coefficient
 
-  vector[K] theta; // location parameter for logit-normal prior
-  real<lower=0> tau;    // magnitude of covariance matrix in logit-normal prior
+  vector[K] theta_;      // (standard normal) location parameter for logit-normal prior
+  real<lower=0> tau_;    // (standard normal) magnitude of covariance matrix in logit-normal prior
 
-  vector[K] eta;     // follows multi normal distribution
+  vector[K] eta_;     // follows multi (standard) normal distribution
 }
 
 transformed parameters {
+  vector[K] theta = s_theta * theta_;  // (transformed) location parameter for logit-normal prior
+  real<lower=0> tau = s_tau * tau_;    // (transformed) magnitude of covariance matrix in logit-normal prior
+
+  vector[K] eta = theta + tau * eta_;     // follows multi normal distribution
+
   simplex[K] pi = softmax(eta);
+
+  vector[L_mu]    w_mu = s_mu * w_mu_;                 // regression coefficients
+  vector[L_sigma] w_sigma = s_sigma * w_sigma_;                 // regression coefficient
 }
 
 model {
   // Priors
-  theta ~ normal(0, s_theta);
-  tau ~ normal(0, s_tau);
-  eta ~ multi_normal(theta, tau * Xi);
-  w_mu ~ normal(0, s_mu);
-  w_sigma ~ normal(0, s_sigma);
+  theta_ ~ normal(0, 1);
+  tau_ ~ normal(0, 1);
+
+  vector[K] zeros = rep_vector(0, K); // A zero vector of size N
+  eta_ ~ multi_normal(zeros, Xi);
+
+  w_mu_ ~ normal(0, 1);
+  w_sigma_ ~ normal(0, 1);
 
   // beta values of the cell mixture
   vector[N] xtilde = X * pi;
