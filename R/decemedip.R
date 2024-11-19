@@ -48,7 +48,7 @@ decemedip <- function(
     ref_cts = hg19.ref.cts.se,
     ref_anc = hg19.ref.anc.se,
     weight_cts = 1,
-    weight_anc = 0.5,
+    weight_anc = 1,
     diagnostics = TRUE,
     seed = 2024,
     cores = 4,
