@@ -47,6 +47,8 @@ decemedip <- function(
     counts_anc = c(),
     ref_cts = hg19.ref.cts.se,
     ref_anc = hg19.ref.anc.se,
+    weight_cts = 1,
+    weight_anc = 0.5,
     diagnostics = TRUE,
     seed = 2024,
     cores = 4,
@@ -72,8 +74,9 @@ decemedip <- function(
   stopifnot(SummarizedExperiment::ncol(ref_cts) == SummarizedExperiment::ncol(ref_anc))
 
   ## Checks on stan parameters
-  stopifnot(c('alpha','s_mu','s_sigma','n_knot_z','degree_z','Xi','s_theta','s_tau')
+  stopifnot(c('alpha','s_mu','s_sigma','n_knot_z','degree_z','Xi','s_theta','s_tau', 'weights_raw')
             %in% names(stan_input_params))
+  stopifnot(length(stan_input_params$alpha) == SummarizedExperiment::ncol(ref_cts))
   stopifnot(length(stan_input_params$alpha) == SummarizedExperiment::ncol(ref_cts))
 
   ## Checks on exclusivity of counts and bam files
@@ -111,6 +114,8 @@ decemedip <- function(
   y <- c(counts_cts, counts_anc)
   X <- rbind(SummarizedExperiment::assays(ref_cts)[[1]], SummarizedExperiment::assays(ref_anc)[[1]])
   z <- c(SummarizedExperiment::rowData(ref_cts)$n_cpgs_100bp, SummarizedExperiment::rowData(ref_anc)$n_cpgs_100bp) |> log1p()
+  ## Assign weights to the CTS sites and anchor sites
+  weights_raw <- c(rep(weight_cts, SummarizedExperiment::nrow(ref_cts)), rep(weight_anc, SummarizedExperiment::nrow(ref_anc)))
 
   # add head and tail into knots for computation in the stan script
   if (stan_input_params$n_knot_z == 0) probs <- NULL else probs <- seq(0, 1, length.out = stan_input_params$n_knot_z)
@@ -118,7 +123,8 @@ decemedip <- function(
   stan_input_params$n_knot_z <- length(stan_input_params$knots_z)
 
   ## Prepare input for stan model
-  data_list <- c(list('N' = nrow(X), 'K' = ncol(X), 'y' = y, 'X' = X, 'z' = z), stan_input_params)
+  data_list <- c(list('N' = nrow(X), 'K' = ncol(X), 'y' = y, 'X' = X, 'z' = z, 'weights_raw' = weights_raw),
+                 stan_input_params)
 
 
   if (diagnostics) {

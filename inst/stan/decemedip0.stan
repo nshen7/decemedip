@@ -58,16 +58,19 @@ data {
   corr_matrix[K] Xi; // Correlation matrix for logit-normal prior
 
   // regression parameters
-  int<lower=0> s_mu;      // normal std prior on w_mu
-  int<lower=0> s_sigma;   // normal std prior on w_sigma
+  real<lower=0> s_mu;      // normal std prior on w_mu
+  real<lower=0> s_sigma;   // normal std prior on w_sigma
 
-  int<lower=0> s_theta;   // normal std prior on logit-normal location
-  int<lower=0> s_tau;     // normal std prior on logit-normal dispersion
+  real<lower=0> s_theta;   // normal std prior on logit-normal location
+  real<lower=0> s_tau;     // normal std prior on logit-normal dispersion
 
   // spline parameters
   int n_knot_z; // num of knots
   vector[n_knot_z] knots_z; // the sequence of knots
   int degree_z; // the degree of spline (is equal to order - 1)
+
+  // Weights on observations (i.e., regions)
+  vector<lower=0>[N] weights_raw; // Original weights
 }
 
 transformed data {
@@ -81,6 +84,10 @@ transformed data {
   // Number of predictors in the design matrix for mu and sigma
   int L_mu = n_basis_z + 1;
   int L_sigma = n_basis_z + 1;
+
+  // Normalize the weights so that they add up to 1
+  vector[N] weights = weights_raw / sum(weights_raw) * N; // Normalize weights
+
 }
 
 parameters {
@@ -94,6 +101,7 @@ parameters {
 }
 
 transformed parameters {
+
   vector[K] theta = s_theta * theta_;  // (transformed) location parameter for logit-normal prior
   real<lower=0> tau = s_tau * tau_;    // (transformed) magnitude of covariance matrix in logit-normal prior
 
@@ -103,6 +111,7 @@ transformed parameters {
 
   vector[L_mu]    w_mu = s_mu * w_mu_;                 // regression coefficients
   vector[L_sigma] w_sigma = s_sigma * w_sigma_;                 // regression coefficient
+
 }
 
 model {
@@ -138,6 +147,7 @@ model {
   vector[N] sigma = exp(D_sigma * w_sigma);
 
   for (n in 1:N) {
-    target += neg_binomial_2_lpmf(y[n] | mu[n], sigma[n]); // intercept included in X
+    target += weights[n] * neg_binomial_2_lpmf(y[n] | mu[n], sigma[n]); // intercept included in X
   }
 }
+
