@@ -20,6 +20,10 @@
 #' @param ref_anc A \code{SummarizedExperiment} object that contains the genomic coordinates
 #' and beta values of the anchor sites/regions from reference cell types.  The default
 #' reference is explained in the manuscript of \pkg{decemedip}.
+#' @param weight_cts A numeric value indicating the weights that should be put on cell type-specific
+#' sites/regions. Default is 1.
+#' @param weight_anc A numeric value indicating the weights that should be put on cell type-specific
+#' sites/regions. Default is 1.
 #' @param seed The seed for random number generation in MCMC sampling.
 #' @param chains A positive integer specifying the number of Markov chains. The default is 4.
 #' @param iter A positive integer specifying the number of iterations for each chain (including

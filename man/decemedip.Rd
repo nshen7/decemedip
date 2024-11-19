@@ -11,6 +11,8 @@ decemedip(
   counts_anc = c(),
   ref_cts = hg19.ref.cts.se,
   ref_anc = hg19.ref.anc.se,
+  weight_cts = 1,
+  weight_anc = 1,
   diagnostics = TRUE,
   seed = 2024,
   cores = 4,
@@ -46,6 +48,12 @@ reference is explained in the manuscript of \pkg{decemedip}.}
 \item{ref_anc}{A \code{SummarizedExperiment} object that contains the genomic coordinates
 and beta values of the anchor sites/regions from reference cell types.  The default
 reference is explained in the manuscript of \pkg{decemedip}.}
+
+\item{weight_cts}{A numeric value indicating the weights that should be put on cell type-specific
+sites/regions. Default is 1.}
+
+\item{weight_anc}{A numeric value indicating the weights that should be put on cell type-specific
+sites/regions. Default is 1.}
 
 \item{diagnostics}{A logic value that indicates whether to include components of the stan model
 in the output that are necessary for future diagnostics of the model, such as posterior
