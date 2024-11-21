@@ -12,15 +12,15 @@ decemedip(
   ref_cts = hg19.ref.cts.se,
   ref_anc = hg19.ref.anc.se,
   weight_cts = 1,
-  weight_anc = 1,
+  weight_anc = 0.5,
   diagnostics = TRUE,
   seed = 2024,
   cores = 4,
   chains = 4,
   iter = 2000,
-  stan_input_params = list(alpha = rep(1, SummarizedExperiment::ncol(ref_cts)), s_mu = 1,
-    s_sigma = 1, n_knot_z = 0, degree_z = 3, Xi =
-    cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 1, s_tau = 1),
+  stan_input_params = list(alpha = rep(1, SummarizedExperiment::ncol(ref_cts)), s_mu = 3,
+    s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
+    cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
   stan_control = NULL,
   ...
 )
@@ -50,7 +50,7 @@ and beta values of the anchor sites/regions from reference cell types.  The defa
 reference is explained in the manuscript of \pkg{decemedip}.}
 
 \item{weight_cts}{A numeric value indicating the weights that should be put on cell type-specific
-sites/regions. Default is 1.}
+sites/regions. Default is 0.5.}
 
 \item{weight_anc}{A numeric value indicating the weights that should be put on cell type-specific
 sites/regions. Default is 1.}
