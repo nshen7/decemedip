@@ -36,12 +36,15 @@
 #' Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.
 #' @param timeout_sec A numerical value indicating the number of seconds allowed for
 #' the MCMC to run before restarting the chains with a new random seed.
+#' @param max_retries An integer value indicating the maximum number of tries with different seed
+#' for MCMC if it fails to converge.
 #' @param ... Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.
 #'
 #' @importFrom SummarizedExperiment assays
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom SummarizedExperiment ncol
 #' @importFrom SummarizedExperiment nrow
+#' @importFrom R.utils withTimeout
 #' @return
 #' @export
 #'
@@ -72,6 +75,7 @@ decemedip <- function(
     ),
     stan_control = NULL,
     timeout_sec = 2*iter,
+    max_retries = 5,
     ...
 ) {
 
@@ -143,22 +147,32 @@ decemedip <- function(
 
   if (is.null(stan_control)) stan_control <- list(adapt_delta = 0.95, max_treedepth = 15)
 
-  ## Run MCMC
-  posterior <-
+  ## Run MCMC (automatically rerun with a new seed if reaches timeout)
+  success <- FALSE  # Flag to track success
 
-  posterior <- tryCatch({
-    withTimeout({
-      rstan::sampling(model, data = data_list,
-                      iter = iter, chains = chains, cores = cores, seed = seed,
-                      control = stan_control, ...)
-    }, timeout = timeout_sec)  # Timeout if the MCMC runs for more than 2*iter seconds
-  }, TimeoutException = function(e) {
-    message("Command took too long, restarting with a new seed...")
-    ## If timeout, change seed
-    rstan::sampling(model, data = data_list,
-                    iter = iter, chains = chains, cores = cores, seed = seed + 1000,
-                    control = stan_control, ...)
-  })
+  for (i in seq_len(max_retries)) {
+    seed <- seed + i - 1
+    posterior <- tryCatch({
+      R.utils::withTimeout({
+        rstan::sampling(model, data = data_list,
+                        iter = iter, chains = chains, cores = cores, seed = seed,
+                        control = stan_control, ...)
+      }, timeout = timeout_sec)  # Timeout in seconds
+    }, TimeoutException = function(e) {
+      message(paste("MCMC with seed", seed, "took too long, trying a new one..."))
+      NULL  # Return NULL if timeout occurs
+    })
+
+    if (!is.null(posterior)) {
+      success <- TRUE
+      message(paste("MCMC converged with seed", seed))
+      break  # Exit the loop if the algorithm succeeds
+    }
+  }
+
+  if (!success) {
+    message(paste("MCMC failed to converge after", max_retries, "tries."))
+  }
 
   ## Return model
   return(list('data_list' = data_list, 'posterior' = posterior))

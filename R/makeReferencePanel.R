@@ -25,6 +25,8 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment colData<-
 #' @importFrom SummarizedExperiment rowData<-
+#' @importFrom GenomicRanges granges resize
+#' @importFrom GenomicRanges countOverlaps
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @importClassesFrom GenomicRanges GRanges
 #'
@@ -77,7 +79,10 @@ makeReferencePanel <- function(
   }
 
   ## Include CpG density as covariate
-  rowData(se)$n_cpgs_100bp <- countOverlaps(granges(se) |> resize(width = 100, fix = 'center'), hg19.cpg.coords)
+  rowData(se)$n_cpgs_100bp <- IRanges::countOverlaps(
+    GenomicRanges::granges(se) |>
+      GenomicRanges::resize(width = 100, fix = 'center'),
+    hg19.cpg.coords)
 
   return(se)
 }

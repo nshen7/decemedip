@@ -23,6 +23,7 @@ decemedip(
     cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
   stan_control = NULL,
   timeout_sec = 2 * iter,
+  max_retries = 5,
   ...
 )
 }
@@ -78,6 +79,9 @@ Stan. See the details in the documentation for the control argument in \code{\li
 
 \item{timeout_sec}{A numerical value indicating the number of seconds allowed for
 the MCMC to run before restarting the chains with a new random seed.}
+
+\item{max_retries}{An integer value indicating the maximum number of tries with different seed
+for MCMC if it fails to converge.}
 
 \item{...}{Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.}
 }
