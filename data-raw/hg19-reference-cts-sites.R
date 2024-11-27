@@ -44,7 +44,6 @@ for (i in seq_len(ncol(full_beta.df)))  {
 
 # ---- assemble ref atlas ----
 K_PER_CT <- 100
-K_ADD <- 500; N_PER_SET <- 10
 
 getCTSHyperProbes <- function(label, top_k) {
   idx <- which(full_diff_max.df[[label]] > 0)
@@ -64,46 +63,6 @@ cts_probes.temp <- map_dfr(colnames(full_diff_max.df)[-1],
   select(probe, label)
 ref_cts_beta.temp <- full_beta.df[match(cts_probes.temp$probe, full_atlas.df$probe), ]
 
-## Iteratively identifying the two most similar cell types in the atlas,
-## and adding the CpG site upon which these two cell types differ the most
-left_atlas.temp <- full_atlas.df |> filter(!probe %in% cts_probes.temp$probe)
-
-for (i in 1:(K_ADD/N_PER_SET)) {
-  dist.df <- dist(t(ref_cts_beta.temp), method = 'manhattan') |>
-    as.matrix() |>
-    as.data.frame() |>
-    mutate(cell_type_1 = colnames(ref_cts_beta.temp)) |>
-    pivot_longer(cols = -c('cell_type_1'),
-                 values_to = 'distance',
-                 names_to = 'cell_type_2') |>
-    filter(distance > 0)
-
-  # Find the two cell types with lowest distance
-  idx <- which.min(dist.df$distance)
-  c1 <- dist.df$cell_type_1[idx]
-  c2 <- dist.df$cell_type_2[idx]
-
-  # Find 10 probes that distinguish them, 5 from each direction
-  probes_to_add_1 <- left_atlas.temp |>
-    mutate(diff = left_atlas.temp[c1] - left_atlas.temp[c2]) |>
-    slice_max(order_by = diff, n = N_PER_SET/2, with_ties = FALSE) |>
-    select(probe) |>
-    mutate(label = 'Additional set')
-  probes_to_add_2 <- left_atlas.temp |>
-    mutate(diff = left_atlas.temp[c2] - left_atlas.temp[c1]) |>
-    slice_max(order_by = diff, n = N_PER_SET/2, with_ties = FALSE) |>
-    select(probe) |>
-    mutate(label = 'Additional set')
-  probes_to_add <- rbind(probes_to_add_1, probes_to_add_2)
-
-  # Add the probes to CTS reference and remove them from left_atlas.temp
-  cts_probes.temp <- rbind(cts_probes.temp, probes_to_add)
-  ref_cts_beta.temp <- rbind(ref_cts_beta.temp,
-                             full_beta.df[match(probes_to_add$probe, full_atlas.df$probe), ])
-  left_atlas.temp <- full_atlas.df |> filter(!probe %in% cts_probes.temp$probe)
-
-}
-
 ## The complete reference panel
 ref_cts.df <- cbind(
   cts_probes.temp,
@@ -120,14 +79,22 @@ sum(duplicated(ref_cts.df)) # = 0; no duplicated probes
 all(rownames(ref_cts.df) == ref_cts.df$probe) # = TRUE; all probes correctly mapped
 all(rownames(ref_cts_beta.df) == ref_cts.df$probe) # = TRUE; all probes correctly mapped
 
-
 ## Write out
 ref_cts.gr <- makeGRangesFromDataFrame(ref_cts.df, keep.extra.columns = T)
 ref_cts.gr$n_cpgs_100bp <- countOverlaps(ref_cts.gr |> resize(width = 100, fix = 'center'), hg19.cpg.coords)
 ref_cts.se <- SummarizedExperiment(rowData = ref_cts.gr,
                                    assays = list(beta = ref_cts_beta.df))
-genome(ref_cts.se) <- "hg19"
 
+ref_cts.se <- makeReferencePanel(
+    row_ranges = ref_cts.gr,
+    X = ref_cts_beta.df,
+    col_names = NULL,
+    row_names = NULL,
+    col_data = NULL,
+    row_data = NULL
+)
+
+genome(ref_cts.se) <- "hg19"
 hg19.ref.cts.se <- ref_cts.se
 usethis::use_data(hg19.ref.cts.se, overwrite = TRUE)
 usethis::use_data(hg19.ref.cts.se, overwrite = TRUE, internal = TRUE)

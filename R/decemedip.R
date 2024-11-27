@@ -34,6 +34,8 @@
 #' decemedip model.
 #' @param stan_control A named list of parameters to control the sampler's behavior in
 #' Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.
+#' @param timeout_sec A numerical value indicating the number of seconds allowed for
+#' the MCMC to run before restarting the chains with a new random seed.
 #' @param ... Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.
 #'
 #' @importFrom SummarizedExperiment assays
@@ -69,6 +71,7 @@ decemedip <- function(
       's_tau'     = 3
     ),
     stan_control = NULL,
+    timeout_sec = 2*iter,
     ...
 ) {
 
@@ -141,9 +144,21 @@ decemedip <- function(
   if (is.null(stan_control)) stan_control <- list(adapt_delta = 0.95, max_treedepth = 15)
 
   ## Run MCMC
-  posterior <- rstan::sampling(model, data = data_list,
-                               iter = iter, chains = chains, cores = cores, seed = seed,
-                               control = stan_control, ...)
+  posterior <-
+
+  posterior <- tryCatch({
+    withTimeout({
+      rstan::sampling(model, data = data_list,
+                      iter = iter, chains = chains, cores = cores, seed = seed,
+                      control = stan_control, ...)
+    }, timeout = timeout_sec)  # Timeout if the MCMC runs for more than 2*iter seconds
+  }, TimeoutException = function(e) {
+    message("Command took too long, restarting with a new seed...")
+    ## If timeout, change seed
+    rstan::sampling(model, data = data_list,
+                    iter = iter, chains = chains, cores = cores, seed = seed + 1000,
+                    control = stan_control, ...)
+  })
 
   ## Return model
   return(list('data_list' = data_list, 'posterior' = posterior))

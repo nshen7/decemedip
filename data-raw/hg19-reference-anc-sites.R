@@ -92,11 +92,12 @@ sampleRowsAccordingToCGDensity <- function(se, k, seed = 2022) {
 u_atlas_sampled.se <- sampleRowsAccordingToCGDensity(se = u_atlas.se, k = K_PER_DIRECTION)
 m_atlas_sampled.se <- sampleRowsAccordingToCGDensity(se = m_atlas.se, k = K_PER_DIRECTION)
 
-## checking distribution of CpG density of anchor sites
 table(rowData(u_atlas_sampled.se)$n_cpgs_100bp)
 table(rowData(m_atlas_sampled.se)$n_cpgs_100bp)
 
+
 ref_anc.se <- rbind(u_atlas_sampled.se, m_atlas_sampled.se)
+
 genome(ref_anc.se) <- "hg19"
 
 hg19.ref.anc.se <- ref_anc.se

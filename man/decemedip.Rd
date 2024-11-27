@@ -22,6 +22,7 @@ decemedip(
     s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
     cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
   stan_control = NULL,
+  timeout_sec = 2 * iter,
   ...
 )
 }
@@ -74,6 +75,9 @@ decemedip model.}
 
 \item{stan_control}{A named list of parameters to control the sampler's behavior in
 Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.}
+
+\item{timeout_sec}{A numerical value indicating the number of seconds allowed for
+the MCMC to run before restarting the chains with a new random seed.}
 
 \item{...}{Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.}
 }

@@ -69,12 +69,15 @@ makeReferencePanel <- function(
 
   if (!is.null(col_data)) {
     if (!is.null(col_names)) rownames(col_data) <- col_names
-    colData(se) <- col_data
+    colData(se) <- cbind(colData(se), col_data)
   }
   if (!is.null(row_data)) {
     if (!is.null(row_names)) rownames(row_data) <- row_names
-    rowData(se) <- row_data
+    rowData(se) <- cbind(rowData(se), row_data)
   }
+
+  ## Include CpG density as covariate
+  rowData(se)$n_cpgs_100bp <- countOverlaps(granges(se) |> resize(width = 100, fix = 'center'), hg19.cpg.coords)
 
   return(se)
 }
