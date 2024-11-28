@@ -74,7 +74,7 @@ decemedip <- function(
       's_tau'     = 3
     ),
     stan_control = NULL,
-    timeout_sec = 2*iter,
+    timeout_sec = 2*iter*ceiling(chains/cores),
     max_retries = 5,
     ...
 ) {
@@ -151,7 +151,7 @@ decemedip <- function(
   success <- FALSE  # Flag to track success
 
   for (i in seq_len(max_retries)) {
-    seed <- seed + i - 1
+    seed <- seed + (i - 1) * exp(10)
     posterior <- tryCatch({
       R.utils::withTimeout({
         rstan::sampling(model, data = data_list,
