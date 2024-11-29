@@ -34,7 +34,7 @@
 #' decemedip model.
 #' @param stan_control A named list of parameters to control the sampler's behavior in
 #' Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.
-#' @param timeout_sec A numerical value indicating the number of seconds allowed for
+#' @param timeout_sec A numerical value indicating the CPU/processor time (in seconds) allowed for
 #' the MCMC to run before restarting the chains with a new random seed.
 #' @param max_retries An integer value indicating the maximum number of tries with different seed
 #' for MCMC if it fails to converge.
@@ -73,9 +73,9 @@ decemedip <- function(
       's_theta'   = 3,
       's_tau'     = 3
     ),
-    stan_control = NULL,
-    timeout_sec = 2*iter*ceiling(chains/cores),
-    max_retries = 5,
+    stan_control = list(adapt_delta = 0.95, max_treedepth = 15),
+    timeout_sec = 2*(diagnostics + 1)*iter*chains,
+    max_retries = 3,
     ...
 ) {
 
@@ -145,27 +145,28 @@ decemedip <- function(
     model <- stanmodels$decemedip0
   }
 
-  if (is.null(stan_control)) stan_control <- list(adapt_delta = 0.95, max_treedepth = 15)
+  # if (is.null(stan_control)) stan_control <- list(adapt_delta = 0.95, max_treedepth = 15)
 
   ## Run MCMC (automatically rerun with a new seed if reaches timeout)
   success <- FALSE  # Flag to track success
 
   for (i in seq_len(max_retries)) {
-    seed <- seed + (i - 1) * exp(10)
+
+    this_seed <- seed + (i - 1) * exp(10)
     posterior <- tryCatch({
       R.utils::withTimeout({
         rstan::sampling(model, data = data_list,
-                        iter = iter, chains = chains, cores = cores, seed = seed,
+                        iter = iter, chains = chains, cores = cores, seed = this_seed,
                         control = stan_control, ...)
       }, timeout = timeout_sec)  # Timeout in seconds
     }, TimeoutException = function(e) {
-      message(paste("MCMC with seed", seed, "took too long, trying a new one..."))
+      message(paste("MCMC with seed", this_seed, "took too long, trying a new one..."))
       NULL  # Return NULL if timeout occurs
     })
 
     if (!is.null(posterior)) {
       success <- TRUE
-      message(paste("MCMC converged with seed", seed))
+      message(paste("MCMC converged with seed", this_seed))
       break  # Exit the loop if the algorithm succeeds
     }
   }

@@ -21,9 +21,9 @@ decemedip(
   stan_input_params = list(alpha = rep(1, SummarizedExperiment::ncol(ref_cts)), s_mu = 3,
     s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
     cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
-  stan_control = NULL,
-  timeout_sec = 2 * iter,
-  max_retries = 5,
+  stan_control = list(adapt_delta = 0.95, max_treedepth = 15),
+  timeout_sec = 2 * (diagnostics + 1) * iter * chains,
+  max_retries = 3,
   ...
 )
 }
@@ -77,7 +77,7 @@ decemedip model.}
 \item{stan_control}{A named list of parameters to control the sampler's behavior in
 Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.}
 
-\item{timeout_sec}{A numerical value indicating the number of seconds allowed for
+\item{timeout_sec}{A numerical value indicating the CPU/processor time (in seconds) allowed for
 the MCMC to run before restarting the chains with a new random seed.}
 
 \item{max_retries}{An integer value indicating the maximum number of tries with different seed
