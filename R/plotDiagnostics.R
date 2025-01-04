@@ -55,6 +55,7 @@ plotDiagnostics <- function(
     p <- plot.df |>
       ggplot2::ggplot(ggplot2::aes(x = x)) +
       ggplot2::geom_ribbon(ggplot2::aes(ymin = y_pred_2.5, ymax = y_pred_97.5), fill = 'lightgrey') +
+      ggplot2::geom_linerange(aes(ymin = y, ymax = y_pred), size = 0.5, color = 'darkgrey') +
       ggplot2::geom_point(ggplot2::aes(y = y), size = 0.5, color = 'orange2') +
       ggplot2::geom_point(ggplot2::aes(y = y_pred), size = 0.5) +
       ggplot2::facet_wrap(~ exp(z), scales = 'free_y') +

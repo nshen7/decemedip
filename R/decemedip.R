@@ -64,7 +64,6 @@ decemedip <- function(
     chains = 4,
     iter = 2000,
     stan_input_params = list(
-      'alpha'     = rep(1, SummarizedExperiment::ncol(ref_cts)),
       's_mu'      = 3,
       's_sigma'   = 3,
       'n_knot_z'  = 0,
@@ -85,10 +84,7 @@ decemedip <- function(
   stopifnot(SummarizedExperiment::ncol(ref_cts) == SummarizedExperiment::ncol(ref_anc))
 
   ## Checks on stan parameters
-  stopifnot(c('alpha','s_mu','s_sigma','n_knot_z','degree_z','Xi','s_theta','s_tau')
-            %in% names(stan_input_params))
-  stopifnot(length(stan_input_params$alpha) == SummarizedExperiment::ncol(ref_cts))
-  stopifnot(length(stan_input_params$alpha) == SummarizedExperiment::ncol(ref_cts))
+  stopifnot(c('s_mu','s_sigma','n_knot_z','degree_z','Xi','s_theta','s_tau') %in% names(stan_input_params))
 
   ## Checks on exclusivity of counts and bam files
   if (!is.null(sample_bam_file) | !is.null(paired_end)) {
