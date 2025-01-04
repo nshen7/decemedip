@@ -18,8 +18,7 @@ decemedip(
   cores = 4,
   chains = 4,
   iter = 2000,
-  stan_input_params = list(alpha = rep(1, SummarizedExperiment::ncol(ref_cts)), s_mu = 3,
-    s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
+  stan_input_params = list(s_mu = 3, s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
     cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
   stan_control = list(adapt_delta = 0.95, max_treedepth = 15),
   timeout_sec = 2 * (diagnostics + 1) * iter * chains,
@@ -64,12 +63,12 @@ predictive checks. For details, please refer to the function \code{\link{plotDia
 \item{seed}{The seed for random number generation in MCMC sampling.}
 
 \item{cores}{A positive integer specifying the number of cores that can be used for
-MCMC sampling. The default is 1000.}
+MCMC sampling. The default is 4}
 
 \item{chains}{A positive integer specifying the number of Markov chains. The default is 4.}
 
 \item{iter}{A positive integer specifying the number of iterations for each chain (including
-warmup). The default is 1000.}
+warmup). The default is 2000.}
 
 \item{stan_input_params}{A named list of parameters that specifies the prior of the
 decemedip model.}

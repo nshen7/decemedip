@@ -27,9 +27,9 @@
 #' @param seed The seed for random number generation in MCMC sampling.
 #' @param chains A positive integer specifying the number of Markov chains. The default is 4.
 #' @param iter A positive integer specifying the number of iterations for each chain (including
-#' warmup). The default is 1000.
+#' warmup). The default is 2000.
 #' @param cores A positive integer specifying the number of cores that can be used for
-#' MCMC sampling. The default is 1000.
+#' MCMC sampling. The default is 4
 #' @param stan_input_params A named list of parameters that specifies the prior of the
 #' decemedip model.
 #' @param stan_control A named list of parameters to control the sampler's behavior in
