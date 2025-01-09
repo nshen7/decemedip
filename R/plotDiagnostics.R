@@ -47,10 +47,13 @@ plotDiagnostics <- function(
       y = data_list$y,
       x = as.matrix(data_list$X) %*% matrix(smr_pi.df$mean, ncol = 1),
       z = data_list$z,
+      density = round(exp(data_list$z) - 1),
       y_pred = colMeans(y_sim),
       y_pred_2.5 = colQuantiles(y_sim, probs = 0.025),
       y_pred_97.5 = colQuantiles(y_sim, probs = 0.975)
-    )
+    ) |>
+      mutate(density = factor(density, labels = paste0('CpG density: ', levels(density))))
+
 
     p <- plot.df |>
       ggplot2::ggplot(ggplot2::aes(x = x)) +
@@ -58,8 +61,11 @@ plotDiagnostics <- function(
       ggplot2::geom_linerange(aes(ymin = y, ymax = y_pred), size = 0.5, color = 'darkgrey') +
       ggplot2::geom_point(ggplot2::aes(y = y), size = 0.5, color = 'orange2') +
       ggplot2::geom_point(ggplot2::aes(y = y_pred), size = 0.5) +
-      ggplot2::facet_wrap(~ exp(z), scales = 'free_y') +
-      ggplot2::theme_classic()
+      ggplot2::facet_wrap(~ density, scales = 'fixed') +
+      ggplot2::theme_classic() +
+      ggplot2::scale_x_continuous(breaks = c(0, 0.5, 1), limits = c(0 ,1)) +
+      ggplot2::xlab('Beta value') +
+      ggplot2::ylab('Actual (in orange) and fitted (in black) MeDIP-seq count')
     return(p)
   }
 
