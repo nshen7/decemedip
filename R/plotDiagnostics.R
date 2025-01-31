@@ -16,6 +16,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' output <- decemedip(sample_bam_file = 'dir/to/bam/file',  paired = TRUE)
+#' plotDiagnostics(output, plot_type = "y_fit")
+#' }
 plotDiagnostics <- function(
     decemedip_output,
     plot_type,

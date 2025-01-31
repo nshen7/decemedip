@@ -48,3 +48,16 @@ and an assay named 'X' that stores the beta values of reference regions.
 Function for assembling a SummarizedExperiment object of reference panel for
 cell type deconvolution (which is used in \code{decemedip} function)
 }
+\examples{
+gr <- GenomicRanges::GRanges(
+  seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),      # Chromosome names
+  ranges = IRanges::IRanges(start = c(101123, 203456, 987654), # Start positions
+                            end = c(101125, 203458, 987656)),  # End positions
+  cpg_id = c("CpG_001", "CpG_002", "CpG_003")      # CpG site IDs
+)
+makeReferencePanel(
+  row_ranges = gr,
+  X = matrix(runif(6), nrow = 3)
+)
+
+}

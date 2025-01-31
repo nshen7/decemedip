@@ -8,6 +8,7 @@ getSummaryOnPi(
   posterior,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
   digits_summary = 5,
+  cell_type_names = colnames(hg19.ref.cts.se),
   ...
 )
 }
@@ -20,8 +21,21 @@ is c(0.025,0.25,0.5,0.75,0.975).}
 \item{digits_summary}{The number of significant digits to use in the summary,
 defaulting to 5.}
 
+\item{cell_type_names}{Name of the cell types in reference panel. The order
+should align with order in the reference panel.}
+
 \item{...}{Additional arguments that get passed into \code{rstan::monitor} function.}
+}
+\value{
+A data.frame object containg summary statistics and diagnostic statistics
+of the fitted cell type proportions.
 }
 \description{
 Extract summary statistics and diagnostics on fitted cell type proportions
+}
+\examples{
+\dontrun{
+output <- decemedip(sample_bam_file = 'dir/to/bam/file',  paired = TRUE)
+smr_pi.df <- getSummaryOnPi(output$posterior)
+}
 }

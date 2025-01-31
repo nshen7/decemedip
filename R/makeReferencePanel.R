@@ -35,6 +35,16 @@
 #' @export
 #'
 #' @examples
+#' gr <- GenomicRanges::GRanges(
+#'   seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),      # Chromosome names
+#'   ranges = IRanges::IRanges(start = c(101123, 203456, 987654), # Start positions
+#'                             end = c(101125, 203458, 987656)),  # End positions
+#'   cpg_id = c("CpG_001", "CpG_002", "CpG_003")      # CpG site IDs
+#' )
+#' makeReferencePanel(
+#'   row_ranges = gr,
+#'   X = matrix(runif(6), nrow = 3)
+#' )
 #'
 makeReferencePanel <- function(
     row_ranges,
@@ -67,7 +77,7 @@ makeReferencePanel <- function(
   if (!is.null(col_names)) colnames(X) <- col_names
   if (!is.null(row_names)) rownames(X) <- row_names
 
-  se <- SummarizedExperiment::SummarizedExperiment(rowRanges = row_ranges, assays = list(X = X))
+  se <- SummarizedExperiment::SummarizedExperiment(rowRanges = row_ranges, assays = list(beta = X))
 
   if (!is.null(col_data)) {
     if (!is.null(col_names)) rownames(col_data) <- col_names

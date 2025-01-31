@@ -39,7 +39,13 @@
 #' @export
 #'
 #' @examples
-#' ?getRoiReadCount
+#' \dontrun{
+#' se <- getRoiReadCount(
+#'  sample_bam_files = c('dir/to/bam1','dir/to/bam2'),
+#'  sample_names = c('sample1', 'sample2'),
+#'  sample_paired = TRUE
+#' )
+#' }
 #'
 getRoiReadCount <- function(
     sample_bam_files,

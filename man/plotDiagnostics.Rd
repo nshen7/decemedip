@@ -34,3 +34,9 @@ in the case of \code{plot_type = 'model_fit'}.}
 \description{
 Diagnostics for model fitting in \code{\link{decemedip}}
 }
+\examples{
+\dontrun{
+output <- decemedip(sample_bam_file = 'dir/to/bam/file',  paired = TRUE)
+plotDiagnostics(output, plot_type = "y_fit")
+}
+}

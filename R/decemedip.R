@@ -45,10 +45,20 @@
 #' @importFrom SummarizedExperiment ncol
 #' @importFrom SummarizedExperiment nrow
 #' @importFrom R.utils withTimeout
-#' @return
+#' @return A list of two elements:
+#' 1. `data_list`: An organized list of variables used as input to the Stan posterior sampling function.
+#' 2. `posterior`: An `stanfit` object produced by Stan representing the fitted posteriors.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+#' counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
+#' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
+#' counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
+#' # Fit decemedip model
+#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100)
+#' }
 decemedip <- function(
     sample_bam_file = NULL,
     paired_end = NULL,

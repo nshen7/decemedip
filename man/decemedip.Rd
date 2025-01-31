@@ -84,6 +84,23 @@ for MCMC if it fails to converge.}
 
 \item{...}{Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.}
 }
+\value{
+A list of two elements:
+\enumerate{
+\item \code{data_list}: An organized list of variables used as input to the Stan posterior sampling function.
+\item \code{posterior}: An \code{stanfit} object produced by Stan representing the fitted posteriors.
+}
+}
 \description{
 Main function to perform cell type deconvolution with MeDIP-seq data
+}
+\examples{
+\dontrun{
+# read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
+# read counts of anchor CpGs of the sample 'LuCaP_147CR'
+counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
+# Fit decemedip model
+output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100)
+}
 }

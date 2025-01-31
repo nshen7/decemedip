@@ -5,18 +5,16 @@ author:
   affiliation: 
   - Department of Statistics, University of British Columbia; 
   - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
-  email: ning.shen@stat.ubc.ca
+  email: ning.shen.wk@gmail.com
 output: 
-  rmarkdown::html_vignette:
   BiocStyle::html_document:
-    toc: true
-    toc_depth: 3
+    titlecaps: false
     toc_float: true
-    number_sections: true
     fig_width: 9
     fig_height: 4.5
+    number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Analyzing methylated DNA immunoprecipitation sequencing data with decemedip}
+  %\VignetteIndexEntry{Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,9 +22,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "##"
-)
+  comment = "##")
 ```
+
 
 # Citation
 
@@ -52,6 +50,7 @@ After installation, load the decemedip package:
 ```{r setup, warning=F, message=F}
 library(here)
 library(dplyr)
+library(ggplot2)
 library(decemedip)
 options(digits = 2)
 ```
@@ -64,7 +63,9 @@ devtools::load_all('..')
 
 Cell-free and bulk DNA methylation data obtained through MeDIP-seq reflect a mixture of methylation signals across multiple cell types. Decomposing these signals to infer cell type composition can provide valuable insights for cancer diagnosis, immune response monitoring, and other biomedical applications. However, challenges like enrichment-induced biases and sparse reference data make this task complex. The `decemedip` package addresses these challenges through a hierarchical Bayesian framework that estimates cell type proportions and models the relationship between MeDIP-seq counts and reference methylation data.
 
-```{r decemedip, fig.retina = NULL, fig.align='center', fig.wide = TRUE, echo=FALSE}
+decemedip couples a logit-normal model with a generalize additive model (GAM) framework. For each site $i \in \{1, ..., N\}$ in the reference panel, the input to the model is the fractional methylation levels $x_{ik}$ for each cell type $k \in \{1, ..., K\}$, the CpG density level $z_i$ and the MeDIP-seq read count $y_i$, where $K$ is the total number of cell types. A unit simplex variable that follows a logit-normal prior, $\boldsymbol{\pi} = (\pi_1, ..., \pi_K)$ where $\pi_k > 0, \sum_{k=1}^K \pi_k = 1$, is included to describe the proportions of cell types in the reference panel while taking into account the correlations between these cell types.
+
+```{r, fig.retina = NULL, fig.align='center', fig.wide = TRUE, echo=FALSE}
 knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
 ```
 
@@ -76,7 +77,7 @@ knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
 2. **CpG density**: Information about CpG site density in the genome.
 3. **MeDIP-seq read counts**: Coverage values from the sample of interest.
 
-Note that our package provides default reference matrices for hg19 and hg38, along with the corresponding CpG density information. The objects can be accessed by calling `hg19.ref.cts.se`, `hg19.ref.anc.se` or `hg38.ref.cts.se`, `hg38.ref.anc.se`. 
+Note that our package provides default reference matrices for hg19 and hg38, along with the corresponding CpG density information. The objects can be accessed by calling `hg19.ref.cts.se`, `hg19.ref.anc.se` or `hg38.ref.cts.se`, `hg38.ref.anc.se`. By default, the main function `decemedip()` applies `hg19.ref.cts.se` and `hg19.ref.anc.se` as the reference panel. Please refer to the manuscript for details of the reference panel.
 
 # Fit the Bayesian Model
 
@@ -119,7 +120,7 @@ output <- decemedip(counts_cts = counts_cts,
                     counts_anc = counts_anc,
                     diagnostics = TRUE,
                     cores = 4,
-                    iter = 300)
+                    iter = 100)
 ```
 
 The output of `decemedip()` is a list containing two elements:
@@ -143,8 +144,13 @@ library(rstan)
 Extract the fitted posterior of cell type proportions ($\boldsymbol\pi$): 
 
 ```{r}
-(smr_pi.df <- getSummaryOnPi(output$posterior))
+smr_pi.df <- getSummaryOnPi(output$posterior)
 ```
+
+```{r}
+head(smr_pi.df)
+```
+
 
 + Summary Statistics Columns:
   + `cell_type`: The name of the parameter or variable being analyzed.
@@ -160,28 +166,23 @@ Extract the fitted posterior of cell type proportions ($\boldsymbol\pi$):
   
 Plotting out the fitted cell type proportions with credible intervals:
 
-```{r}
-## Setting colors
-CTS <- gsub('_', ' ', colnames(hg19.ref.cts.se))
-CTCOLORS <- c(grafify:::graf_palettes$fishy[1:5], grafify:::graf_palettes$kelly)
-names(CTCOLORS) <- CTS
+```{r, fig.wide = TRUE}
+labels <- gsub('_', ' ', smr_pi.df$cell_type)
+labels <- gsub('(.*) EPIC', '\\1', labels)
 
-## Plotting
 smr_pi.df |>
-  ggplot(aes(cell_type, mean, color = cell_type)) +
+  mutate(cell_type = factor(cell_type, labels = labels)) |>
+  ggplot(aes(cell_type, mean)) +
   geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`), 
                  position = position_dodge2(width = 0.035),
                  linewidth = 7, alpha = 0.3) +
   geom_linerange(aes(ymin = `25%`, ymax = `75%`), 
                  position = position_dodge2(width = 0.035),
-                 linewidth = 10, alpha = 1) +
+                 linewidth = 7, alpha = 1) +
   geom_point(position = position_dodge2(width = 0.035),
-             fill = 'white', shape = 21, size = 10) +
-  # scale_fill_manual(values = CTCOLORS, labels = CTLABELS) +
+             fill = 'white', shape = 21, size = 8) +
   theme_classic() +
-  theme(legend.position = 'none',
-        axis.text.x = element_text(angle = 45, hjust = 1))
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
@@ -190,7 +191,7 @@ smr_pi.df |>
 Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
 The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
 
-```{r}
+```{r, fig.wide = TRUE}
 plotDiagnostics(output, plot_type = "y_fit")
 ```
 
