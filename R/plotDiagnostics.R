@@ -12,7 +12,6 @@
 #' @param ... Additional arguments to be fed into \code{\link[cowplot]{plot_grid}}
 #' in the case of \code{plot_type = 'model_fit'}.
 #'
-#'
 #' @return
 #' @export
 #'
@@ -48,9 +47,9 @@ plotDiagnostics <- function(
       x = as.matrix(data_list$X) %*% matrix(smr_pi.df$mean, ncol = 1),
       z = data_list$z,
       density = round(exp(data_list$z) - 1),
-      y_pred = colMeans(y_sim),
-      y_pred_2.5 = colQuantiles(y_sim, probs = 0.025),
-      y_pred_97.5 = colQuantiles(y_sim, probs = 0.975)
+      y_pred = Matrix::colMeans(y_sim),
+      y_pred_2.5 = matrixStats::colQuantiles(y_sim, probs = 0.025),
+      y_pred_97.5 = matrixStats::colQuantiles(y_sim, probs = 0.975)
     ) |>
       mutate(density = factor(density, labels = paste0('CpG density: ', levels(density))))
 
@@ -64,7 +63,7 @@ plotDiagnostics <- function(
       ggplot2::facet_wrap(~ density, scales = 'fixed') +
       ggplot2::theme_classic() +
       ggplot2::scale_x_continuous(breaks = c(0, 0.5, 1), limits = c(0 ,1)) +
-      ggplot2::xlab('Beta value') +
+      ggplot2::xlab('Fractional methylation') +
       ggplot2::ylab('Actual (in orange) and fitted (in black) MeDIP-seq count')
     return(p)
   }

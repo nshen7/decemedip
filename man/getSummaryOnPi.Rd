@@ -2,21 +2,26 @@
 % Please edit documentation in R/getSummaryOnPi.R
 \name{getSummaryOnPi}
 \alias{getSummaryOnPi}
-\title{Title}
+\title{Extract summary statistics and diagnostics on fitted cell type proportions}
 \usage{
 getSummaryOnPi(
-  fit,
+  posterior,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
-  digits_summary = 5
+  digits_summary = 5,
+  ...
 )
 }
 \arguments{
-\item{fit}{TODO}
+\item{posterior}{The fitted posterior object from decemedip model.}
 
-\item{probs}{TODO}
+\item{probs}{A numeric vector specifying quantiles of interest. The defaults
+is c(0.025,0.25,0.5,0.75,0.975).}
 
-\item{digits_summary}{TODO}
+\item{digits_summary}{The number of significant digits to use in the summary,
+defaulting to 5.}
+
+\item{...}{Additional arguments that get passed into \code{rstan::monitor} function.}
 }
 \description{
-Title
+Extract summary statistics and diagnostics on fitted cell type proportions
 }

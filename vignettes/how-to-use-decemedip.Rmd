@@ -1,0 +1,210 @@
+---
+title: "Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip"
+author:
+- name: Ning Shen
+  affiliation: 
+  - Department of Statistics, University of British Columbia; 
+  - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
+  email: ning.shen@stat.ubc.ca
+output: 
+  rmarkdown::html_vignette:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    fig_width: 9
+    fig_height: 4.5
+vignette: >
+  %\VignetteIndexEntry{Analyzing methylated DNA immunoprecipitation sequencing data with decemedip}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "##"
+)
+```
+
+# Citation
+
+**If you use decemedip in published research, please cite: **
+
+Shen, Ning, and Keegan Korthauer. "decemedip: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylome" bioRxiv, forthcoming.
+
+
+# Installation
+
+This package will be submitted to Bioconductor. For now, you can install the development version from GitHub:
+
+```{r installation, eval = FALSE}
+# Install stable version from Bioconductor (once available)
+# BiocManager::install("decemedip")
+
+# Install development version from GitHub
+remotes::install_github("nshen7/decemedip")
+```
+
+After installation, load the decemedip package:
+
+```{r setup, warning=F, message=F}
+library(here)
+library(dplyr)
+library(decemedip)
+options(digits = 2)
+```
+
+```{r, include = FALSE}
+devtools::load_all('..')
+```
+
+# Background
+
+Cell-free and bulk DNA methylation data obtained through MeDIP-seq reflect a mixture of methylation signals across multiple cell types. Decomposing these signals to infer cell type composition can provide valuable insights for cancer diagnosis, immune response monitoring, and other biomedical applications. However, challenges like enrichment-induced biases and sparse reference data make this task complex. The `decemedip` package addresses these challenges through a hierarchical Bayesian framework that estimates cell type proportions and models the relationship between MeDIP-seq counts and reference methylation data.
+
+```{r decemedip, fig.retina = NULL, fig.align='center', fig.wide = TRUE, echo=FALSE}
+knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
+```
+
+# Input Data
+
+`decemedip` requires three primary inputs: 
+
+1. **Reference methylation matrix**: A matrix of methylation levels for multiple cell types at selected CpG sites.
+2. **CpG density**: Information about CpG site density in the genome.
+3. **MeDIP-seq read counts**: Coverage values from the sample of interest.
+
+Note that our package provides default reference matrices for hg19 and hg38, along with the corresponding CpG density information. The objects can be accessed by calling `hg19.ref.cts.se`, `hg19.ref.anc.se` or `hg38.ref.cts.se`, `hg38.ref.anc.se`. 
+
+# Fit the Bayesian Model
+
+The main function `decemedip()` fits the decemedip model. It allows two types of input:
+
+1. A BAM file of the sample MeDIP-seq data, or
+1. read counts of the reference CpG sites of the sample.
+
+We provide instructions for both input types as follows.
+
+## Input with a BAM file
+
+```{r eval=FALSE}
+bam_dir <- "path/to/bam/files"
+paired <- TRUE # whether the sequeuncing 
+sample_bam_file <- here(bam_dir, paste0(sample_name, '.bam'))
+```
+
+```{r eval=FALSE}
+output <- decemedip(sample_bam_file = sample_bam_file, 
+                    paired = paired, 
+                    cores = 4)
+```
+
+PS: By default, the `decemedip()` function uses a hg19 reference panel. But users may add the arguments `ref_cts = hg38.ref.cts.se, ref_anc = hg38.ref.anc.se` to apply read counts extraction on hg38 data.
+
+## Input with read counts
+
+We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the Berchuck et al. 2022 study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demontrate the output and diagnostics in this vignette. 
+
+```{r}
+counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR'] # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR'] # read counts of anchor CpGs of the sample 'LuCaP_147CR'
+```
+
+Due to the vignette running time limit by Bioconductor, we only run 300 iterations (`iter = 300`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
+
+```{r}
+output <- decemedip(counts_cts = counts_cts,
+                    counts_anc = counts_anc,
+                    diagnostics = TRUE,
+                    cores = 4,
+                    iter = 300)
+```
+
+The output of `decemedip()` is a list containing two elements:
+
+```{r}
+names(output)
+```
+
++ `data_list`: An organized list of variables used as input to the Stan posterior sampling function.
++ `posterior`: An `stanfit` object produced by Stan representing the fitted posteriors. 
+
+
+# Summarizing Model Outputs
+
+After running the model, you may extract and save the summary of fitted posteriors using the `monitor()` and `extract()` functions provided by the `RStan` package. See documentation of `RStan` for details of these functions.
+
+```{r message=FALSE}
+library(rstan)
+```
+
+Extract the fitted posterior of cell type proportions ($\boldsymbol\pi$): 
+
+```{r}
+(smr_pi.df <- getSummaryOnPi(output$posterior))
+```
+
++ Summary Statistics Columns:
+  + `cell_type`: The name of the parameter or variable being analyzed.
+  + `mean`: The posterior mean, representing the point estimate of the parameter.
+  + `se_mean`: The standard error of the mean, calculated as sd / sqrt(n_eff), indicating precision of the mean estimate.
+  + `sd`: The posterior standard deviation, representing the spread or uncertainty of the parameter estimate.
+  + `2.5%`, `25%`, `50%` (median), `75%`, `97.5%`: Percentiles of the posterior distribution, providing a summary of parameter uncertainty. These define the 95% credible interval (2.5% to 97.5%).
+
++ Diagnostics Columns:
+  + `n_eff`: The effective sample size, indicating how many independent samples the chain produced after accounting for autocorrelation.
+  + `Rhat`: The potential scale reduction factor, measuring chain convergence. Values close to 1.00 suggest good convergence.
+  + `valid`: A flag indicating whether diagnostic checks (e.g., Rhat and n_eff) passed for this parameter (1 = passed, 0 = potential issues).
+  
+Plotting out the fitted cell type proportions with credible intervals:
+
+```{r}
+## Setting colors
+CTS <- gsub('_', ' ', colnames(hg19.ref.cts.se))
+CTCOLORS <- c(grafify:::graf_palettes$fishy[1:5], grafify:::graf_palettes$kelly)
+names(CTCOLORS) <- CTS
+
+## Plotting
+smr_pi.df |>
+  ggplot(aes(cell_type, mean, color = cell_type)) +
+  geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`), 
+                 position = position_dodge2(width = 0.035),
+                 linewidth = 7, alpha = 0.3) +
+  geom_linerange(aes(ymin = `25%`, ymax = `75%`), 
+                 position = position_dodge2(width = 0.035),
+                 linewidth = 10, alpha = 1) +
+  geom_point(position = position_dodge2(width = 0.035),
+             fill = 'white', shape = 21, size = 10) +
+  # scale_fill_manual(values = CTCOLORS, labels = CTLABELS) +
+  theme_classic() +
+  theme(legend.position = 'none',
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+# Fitted relationship between fractional methylation and MeDIP-seq counts
+
+Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
+The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
+
+```{r}
+plotDiagnostics(output, plot_type = "y_fit")
+```
+
+
+# Conclusion
+
+The `decemedip` package provides a robust framework for cell type deconvolution from MeDIP-seq data. By following this vignette, users can apply the method to their own datasets, extract key model outputs, and generate diagnostic plots for analysis.
+
+# References
+
++ Berchuck JE, Baca SC, McClure HM, Korthauer K, Tsai HK, Nuzzo PV, et al. Detecting neuroendocrine prostate cancer through tissue-informed cell-free DNA methylation analysis. Clinical Cancer Research. 2022;28(5):928–938.
+
+# Session Info
+
+```{r}
+sessionInfo()
+```

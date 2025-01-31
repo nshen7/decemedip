@@ -8,7 +8,7 @@ getRoiReadCount(
   sample_bam_files,
   sample_names,
   sample_paired,
-  roi,
+  roi = granges(hg19.ref.cts.se),
   col_data = NULL,
   row_data = NULL,
   bs_genome = "BSgenome.Hsapiens.UCSC.hg19",
@@ -27,7 +27,8 @@ elements of \code{sample_bam_files}.}
 reads (if FALSE).}
 
 \item{roi}{A \code{GRanges} object that contains the genomic coordinates of the region
-of interest (ROI).}
+of interest (ROI). Default is a \code{GRanges} object that contains the default reference set of
+cell type-specific CpGs.}
 
 \item{col_data}{A \code{DataFrame} object that contains metadata for columns (i.e.,
 samples) if specified. Default is NULL. If not NULL, please make sure that
