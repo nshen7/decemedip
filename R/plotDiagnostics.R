@@ -1,7 +1,11 @@
 #' Diagnostics for model fitting in \code{\link{decemedip}}
 #'
 #' @param decemedip_output The output from \code{\link{decemedip}} function.
-#' @param plot_type A string value, either 'y_fit' or 'model_fit'.
+#' @param plot_type A string value, either 'y_fit' or 'model_fit'. \code{plot_type='y_fit'}
+#' provides the fitted MeDIP-seq read counts vs. fractional methylation values,
+#' indicating the fitted relationship between MeDIP-seq counts and fractional methylation.
+#' \code{plot_type='model_fit'} provides a set of diagnostic plots for the fitted Stan
+#' model.
 #' @param model_fit_n_samples Number of randomly selected posterior samples for
 #' plotting the diagnostic plots of stan fit. For \code{plot_type = 'model_fit'}
 #' only.
@@ -12,7 +16,7 @@
 #' @param ... Additional arguments to be fed into \code{\link[cowplot]{plot_grid}}
 #' in the case of \code{plot_type = 'model_fit'}.
 #'
-#' @return
+#' @return An \code{ggplot} object.
 #' @export
 #'
 #' @examples

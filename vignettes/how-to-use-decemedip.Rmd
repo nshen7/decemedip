@@ -7,11 +7,16 @@ author:
   - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
   email: ning.shen.wk@gmail.com
 output: 
+  # rmarkdown::html_vignette:
+  #   fig_width: 8
+  #   fig_height: 6
+  #   toc: true
+  #   toc_depth: 2
   BiocStyle::html_document:
     titlecaps: false
     toc_float: true
-    fig_width: 9
-    fig_height: 4.5
+    fig_width: 8
+    fig_height: 6
     number_sections: true
 vignette: >
   %\VignetteIndexEntry{Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip}
@@ -48,7 +53,7 @@ remotes::install_github("nshen7/decemedip")
 After installation, load the decemedip package:
 
 ```{r setup, warning=F, message=F}
-library(here)
+library(SummarizedExperiment)
 library(dplyr)
 library(ggplot2)
 library(decemedip)
@@ -91,9 +96,8 @@ We provide instructions for both input types as follows.
 ## Input with a BAM file
 
 ```{r eval=FALSE}
-bam_dir <- "path/to/bam/files"
-paired <- TRUE # whether the sequeuncing 
-sample_bam_file <- here(bam_dir, paste0(sample_name, '.bam'))
+sample_bam_file <- "path/to/bam/files"
+paired <- TRUE # whether the sequencing is paired-end
 ```
 
 ```{r eval=FALSE}
@@ -108,6 +112,12 @@ PS: By default, the `decemedip()` function uses a hg19 reference panel. But user
 
 We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the Berchuck et al. 2022 study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demontrate the output and diagnostics in this vignette. 
 
+```{r}
+data(pdx.counts.cts.se)
+data(pdx.counts.anc.se)
+```
+
+We extract the sample `LuCaP_147CR` from this example dataset for follwing illustration:
 ```{r}
 counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR'] # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
 counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR'] # read counts of anchor CpGs of the sample 'LuCaP_147CR'
@@ -133,7 +143,9 @@ names(output)
 + `posterior`: An `stanfit` object produced by Stan representing the fitted posteriors. 
 
 
-# Summarizing Model Outputs
+# Checking model outputs
+
+## Cell type proportions
 
 After running the model, you may extract and save the summary of fitted posteriors using the `monitor()` and `extract()` functions provided by the `RStan` package. See documentation of `RStan` for details of these functions.
 
@@ -166,7 +178,7 @@ head(smr_pi.df)
   
 Plotting out the fitted cell type proportions with credible intervals:
 
-```{r, fig.wide = TRUE}
+```{r, fig.fullwidth=TRUE}
 labels <- gsub('_', ' ', smr_pi.df$cell_type)
 labels <- gsub('(.*) EPIC', '\\1', labels)
 
@@ -186,13 +198,14 @@ smr_pi.df |>
 ```
 
 
-# Fitted relationship between fractional methylation and MeDIP-seq counts
+## Fitted relationship between fractional methylation and MeDIP-seq counts
 
 Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
 The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
 
-```{r, fig.wide = TRUE}
-plotDiagnostics(output, plot_type = "y_fit")
+```{r, fig.fullwidth=TRUE}
+plotDiagnostics(output, plot_type = "y_fit") +
+  ylim(0, 200)
 ```
 
 

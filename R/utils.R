@@ -93,3 +93,33 @@
 "hg19.cpg.coords"
 
 
+#' MeDIP-seq read counts on reference cell type-specific CpGs of 3 PDX samples from Berchuck et al. 2022
+#'
+#' @description This dataset represents a \code{SummarizedExperiment} object that contains
+#' MeDIP-seq read counts on reference cell type-specific CpGs of 3 PDX samples from Berchuck
+#' et al. 2022. Each row is a CpG.
+#' @usage data(pdx.counts.cts.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+#'
+#' @examples
+#'   data(pdx.counts.cts.se)
+#'   pdx.counts.cts.se
+"pdx.counts.cts.se"
+
+#' MeDIP-seq read counts on reference anchor CpGs of 3 PDX samples from Berchuck et al. 2022
+#'
+#' @description This dataset represents a \code{SummarizedExperiment} object that contains
+#' MeDIP-seq read counts on reference anchor CpGs of 3 PDX samples from Berchuck
+#' et al. 2022. Each row is a CpG.
+#' @usage data(pdx.counts.anc.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+#'
+#' @examples
+#'   data(pdx.counts.anc.se)
+#'   pdx.counts.anc.se
+"pdx.counts.anc.se"
+

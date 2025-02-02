@@ -22,7 +22,7 @@ getSummaryOnPi <- function(
     posterior,
     probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
     digits_summary = 5,
-    cell_type_names = colnames(hg19.ref.cts.se),
+    cell_type_names = colnames(decemedip::hg19.ref.cts.se),
     ...
 ) {
   smr_pi.df <- rstan::monitor(rstan::extract(posterior, pars = c("pi"), permuted = FALSE),

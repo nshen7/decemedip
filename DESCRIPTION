@@ -1,6 +1,6 @@
 Package: decemedip
 Title: Cell type deconvolution of cell‑free DNA via Bayesian hierarchical modeling
-Version: 0.0.0.9000
+Version: 0.99.0
 Authors@R: 
     person("Ning", "Shen", , "ning.shen.wk@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2974-1086"))
@@ -12,17 +12,19 @@ Description: The R package decemedip is a novel computational paradigm developed
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Biarch: true
 Depends: 
-    R (>= 3.4.0)
+    R (>= 4.4.0)
 Imports: 
     bayesplot,
     cowplot,
     dplyr,
     GenomicRanges,
     ggplot2,
+    IRanges,
     magrittr,
+    Matrix,
     matrixStats,
     MEDIPS,
     methods,
@@ -42,7 +44,6 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 SystemRequirements: GNU make
-LazyData: true
 Suggests: 
     knitr,
     rmarkdown
