@@ -7,18 +7,18 @@ author:
   - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
   email: ning.shen.wk@gmail.com
 output: 
-  html_document:
-    toc: yes
-    toc_float: true
-    collapsed: true
-    fig_width: 8
-    fig_height: 6
-  # BiocStyle::html_document:
-  #   titlecaps: false
+  # html_document:
+  #   toc: yes
   #   toc_float: true
+  #   collapsed: true
   #   fig_width: 8
   #   fig_height: 6
-  #   number_sections: true
+  BiocStyle::html_document:
+    titlecaps: false
+    toc_float: true
+    fig_width: 8
+    fig_height: 6
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip}
   %\VignetteEngine{knitr::rmarkdown}
@@ -115,7 +115,10 @@ PS: By default, the `decemedip()` function uses a hg19 reference panel. But user
 
 ## Input with read counts
 
-We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the Berchuck et al. 2022 study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demontrate the output and diagnostics in this vignette. 
+We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the Berchuck et al. 2022 [1] study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demonstrate the output and diagnostics in this vignette. 
+
+[1] Berchuck JE, Baca SC, McClure HM, Korthauer K, Tsai HK, Nuzzo PV, et al. Detecting neuroendocrine prostate cancer through tissue-informed cell-free DNA methylation analysis. Clinical Cancer Research. 2022;28(5):928–938.
+
 
 ```{r}
 data(pdx.counts.cts.se)
@@ -218,9 +221,6 @@ plotDiagnostics(output, plot_type = "y_fit") +
 
 The `decemedip` package provides a robust framework for cell type deconvolution from MeDIP-seq data. By following this vignette, users can apply the method to their own datasets, extract key model outputs, and generate diagnostic plots for analysis.
 
-# References
-
-+ Berchuck JE, Baca SC, McClure HM, Korthauer K, Tsai HK, Nuzzo PV, et al. Detecting neuroendocrine prostate cancer through tissue-informed cell-free DNA methylation analysis. Clinical Cancer Research. 2022;28(5):928–938.
 
 # Session Info
 
