@@ -7,17 +7,18 @@ author:
   - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
   email: ning.shen.wk@gmail.com
 output: 
-  # rmarkdown::html_vignette:
-  #   fig_width: 8
-  #   fig_height: 6
-  #   toc: true
-  #   toc_depth: 2
-  BiocStyle::html_document:
-    titlecaps: false
+  html_document:
+    toc: yes
     toc_float: true
+    collapsed: true
     fig_width: 8
     fig_height: 6
-    number_sections: true
+  # BiocStyle::html_document:
+  #   titlecaps: false
+  #   toc_float: true
+  #   fig_width: 8
+  #   fig_height: 6
+  #   number_sections: true
 vignette: >
   %\VignetteIndexEntry{Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip}
   %\VignetteEngine{knitr::rmarkdown}
@@ -82,7 +83,11 @@ knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
 2. **CpG density**: Information about CpG site density in the genome.
 3. **MeDIP-seq read counts**: Coverage values from the sample of interest.
 
-Note that our package provides default reference matrices for hg19 and hg38, along with the corresponding CpG density information. The objects can be accessed by calling `hg19.ref.cts.se`, `hg19.ref.anc.se` or `hg38.ref.cts.se`, `hg38.ref.anc.se`. By default, the main function `decemedip()` applies `hg19.ref.cts.se` and `hg19.ref.anc.se` as the reference panel. Please refer to the manuscript for details of the reference panel.
+## Reference panel
+
+Our package provides default reference matrices for hg19 and hg38 along with the corresponding CpG density information, as objects in class `SummarizedExperiment`. The objects can be accessed by calling `decemedip::hg19.ref.cts.se` and `decemedip::hg19.ref.anc.se`, or `decemedip::hg38.ref.cts.se` and `decemedip::hg38.ref.anc.se`. By default, the main function `decemedip()` applies `hg19.ref.cts.se` and `hg19.ref.anc.se` as the reference panels. Please refer to the manuscript for details of how the default reference panels were constructed.
+
+On a side note, we provide the function `makeReferencePanel()` to allow user to build their own reference panels, which only requires input of reference CpGs and corresponded fractional methylation level matrix. The function computes CpG density on its own. Note that the cell type-specific sites and anchor sites need to be included in two `SummarizedExperiment` objects to be inputs to the main function `decemedip()`. See `?makeReferencePanel` for more information.
 
 # Fit the Bayesian Model
 

@@ -85,8 +85,6 @@
 #' @usage data(hg19.cpg.coords)
 #' @format An object of class \code{GRanges}.
 #'
-#' @details All coordinates are in hg19.
-#'
 #' @examples
 #'   data(hg19.cpg.coords)
 #'   hg19.cpg.coords

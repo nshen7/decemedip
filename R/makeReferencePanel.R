@@ -92,7 +92,7 @@ makeReferencePanel <- function(
   rowData(se)$n_cpgs_100bp <- IRanges::countOverlaps(
     GenomicRanges::granges(se) |>
       GenomicRanges::resize(width = 100, fix = 'center'),
-    hg19.cpg.coords)
+    decemedip::hg19.cpg.coords)
 
   return(se)
 }
