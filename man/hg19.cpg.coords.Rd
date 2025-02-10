@@ -15,9 +15,6 @@ This dataset represents a GRanges object that contains the collection
 of CpGs in chr1-chr22, chrX and chrY. Each row is a CpG. Information was extracted
 from \code{BSgenome.Hsapiens.UCSC.hg19} of package \code{BSgenome}.
 }
-\details{
-All coordinates are in hg19.
-}
 \examples{
   data(hg19.cpg.coords)
   hg19.cpg.coords

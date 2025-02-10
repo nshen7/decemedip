@@ -14,6 +14,7 @@
 #' @references Moss, J., Magenheim, J., Neiman, D. et al. Comprehensive human
 #' cell-type methylation atlas reveals origins of circulating cell-free DNA in
 #' health and disease. \emph{Nat Commun 9, 5068} (2018).
+#' @export
 #'
 #' @examples
 #'   data(hg19.ref.anc.se)
@@ -40,6 +41,7 @@
 #' cell-type methylation atlas reveals origins of circulating cell-free DNA in
 #' health and disease. \emph{Nat Commun 9, 5068} (2018).
 #' https://doi.org/10.1038/s41467-018-07466-6
+#' @export
 #'
 #' @examples
 #'   data(hg19.ref.cts.se)
@@ -55,6 +57,7 @@
 #' @details All coordinates are in hg38.
 #' @usage data(hg38.ref.anc.se)
 #' @format An object of class \code{GRanges}.
+#' @export
 #'
 #' @examples
 #'   data(hg38.ref.anc.se)
@@ -71,6 +74,7 @@
 #' @details All coordinates are in hg38.
 #' @usage data(hg38.ref.cts.se)
 #' @format An object of class \code{GRanges}.
+#' @export
 #'
 #' @examples
 #'   data(hg38.ref.cts.se)
@@ -84,6 +88,7 @@
 #' from \code{BSgenome.Hsapiens.UCSC.hg19} of package \code{BSgenome}.
 #' @usage data(hg19.cpg.coords)
 #' @format An object of class \code{GRanges}.
+#' @export
 #'
 #' @examples
 #'   data(hg19.cpg.coords)
@@ -100,6 +105,7 @@
 #' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @details All coordinates are in hg19.
+#' @export
 #'
 #' @examples
 #'   data(pdx.counts.cts.se)
@@ -113,6 +119,7 @@
 #' et al. 2022. Each row is a CpG.
 #' @usage data(pdx.counts.anc.se)
 #' @format An object of class \code{SummarizedExperiment}.
+#' @export
 #'
 #' @details All coordinates are in hg19.
 #'

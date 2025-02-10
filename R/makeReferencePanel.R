@@ -1,4 +1,4 @@
-#' Function for assembling a SummarizedExperiment object of reference panel for
+#' Function for assembling a SummarizedExperiment object of reference panel in \strong{hg19} for
 #' cell type deconvolution (which is used in \code{decemedip} function)
 #'
 #' @param row_ranges A \code{GRanges} object that contains the genomic coordinates

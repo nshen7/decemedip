@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeReferencePanel.R
 \name{makeReferencePanel}
 \alias{makeReferencePanel}
-\title{Function for assembling a SummarizedExperiment object of reference panel for
+\title{Function for assembling a SummarizedExperiment object of reference panel in \strong{hg19} for
 cell type deconvolution (which is used in \code{decemedip} function)}
 \usage{
 makeReferencePanel(
@@ -45,7 +45,7 @@ An \code{SummarizedExperiment} object with each row represents a reference regio
 and an assay named 'X' that stores the beta values of reference regions.
 }
 \description{
-Function for assembling a SummarizedExperiment object of reference panel for
+Function for assembling a SummarizedExperiment object of reference panel in \strong{hg19} for
 cell type deconvolution (which is used in \code{decemedip} function)
 }
 \examples{
