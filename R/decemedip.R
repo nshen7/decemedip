@@ -54,6 +54,8 @@
 #'
 #' @examples
 #' \dontrun{
+#' data(pdx.counts.cts.se)
+#' data(pdx.counts.anc.se)
 #' # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
 #' counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
 #' # read counts of anchor CpGs of the sample 'LuCaP_147CR'

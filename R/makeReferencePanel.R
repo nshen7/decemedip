@@ -89,10 +89,11 @@ makeReferencePanel <- function(
   }
 
   ## Include CpG density as covariate
+  data(hg19.cpg.coords)
   rowData(se)$n_cpgs_100bp <- IRanges::countOverlaps(
     GenomicRanges::granges(se) |>
       GenomicRanges::resize(width = 100, fix = 'center'),
-    decemedip::hg19.cpg.coords)
+    hg19.cpg.coords)
 
   return(se)
 }
