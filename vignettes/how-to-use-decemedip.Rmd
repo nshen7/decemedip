@@ -85,9 +85,24 @@ knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
 
 ## Reference panel
 
-Our package provides default reference matrices for hg19 and hg38 along with the corresponding CpG density information, as objects in class `SummarizedExperiment`. The objects can be accessed by calling `decemedip::hg19.ref.cts.se` and `decemedip::hg19.ref.anc.se`, or `decemedip::hg38.ref.cts.se` and `decemedip::hg38.ref.anc.se`. By default, the main function `decemedip()` applies `hg19.ref.cts.se` and `hg19.ref.anc.se` as the reference panels. Please refer to the manuscript for details of how the default reference panels were constructed.
+Our package provides default reference matrices for hg19 and hg38 along with the corresponding CpG density information, as objects in class `SummarizedExperiment`. The objects can be accessed by calling `data(hg19.ref.cts.se)` and `data(hg19.ref.anc.se)`, or `data(hg38.ref.cts.se)` and `data(hg38.ref.anc.se)`. By default, the main function `decemedip()` applies `hg19.ref.cts.se` and `hg19.ref.anc.se` as the reference panels. Please refer to the manuscript for details of how the default reference panels were constructed.
 
 On a side note, we provide the function `makeReferencePanel()` to allow user to build their own reference panels, which only requires input of reference CpGs and corresponded fractional methylation level matrix. The function computes CpG density on its own. Note that the cell type-specific sites and anchor sites need to be included in two `SummarizedExperiment` objects to be inputs to the main function `decemedip()`. See `?makeReferencePanel` for more information.
+
+We show how the reference panel look like in the following chunks:
+
+```{r}
+data(hg19.ref.cts.se)
+print(hg19.ref.cts.se)
+head(granges(hg19.ref.cts.se))
+```
+
+```{r}
+data(hg19.ref.anc.se)
+print(hg19.ref.anc.se)
+head(granges(hg19.ref.cts.se))
+```
+
 
 # Fit the Bayesian Model
 

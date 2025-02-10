@@ -9,8 +9,9 @@ decemedip(
   paired_end = NULL,
   counts_cts = c(),
   counts_anc = c(),
-  ref_cts = decemedip::hg19.ref.cts.se,
-  ref_anc = decemedip::hg19.ref.anc.se,
+  ref_assembly = "hg19",
+  ref_cts = NULL,
+  ref_anc = NULL,
   weight_cts = 1,
   weight_anc = 0.5,
   diagnostics = TRUE,
@@ -42,13 +43,16 @@ is specified, please do not specify \code{sample_bam_file} and \code{paired_end}
 a MeDIP-seq sample on reference sites/regions. If  \code{counts_cts} and \code{counts_anc}
 is specified, please do not specify \code{sample_bam_file} and \code{paired_end} to avoid conflict.}
 
-\item{ref_cts}{A \code{SummarizedExperiment} object that contains the genomic coordinates
-and beta values of the cell type-specific sites/regions from reference cell types. The default
-reference is explained in the manuscript of \pkg{decemedip}.}
+\item{ref_assembly}{A string that represents the genome assembly that should be used for cell type-specific
+sites in the reference panel ('hg19' or 'hg38'). Default to 'hg19'. The default reference is explained
+in the manuscript of \pkg{decemedip}. Alternatively, if the user want to provide their own
+reference panel by using the \code{ref_cts} and \code{ref_anc} arguments.}
 
-\item{ref_anc}{A \code{SummarizedExperiment} object that contains the genomic coordinates
-and beta values of the anchor sites/regions from reference cell types.  The default
-reference is explained in the manuscript of \pkg{decemedip}.}
+\item{ref_cts}{A \code{SummarizedExperiment} object that contains the genomic coordinates and
+beta values of the cell type-specific sites/regions from reference cell types.
+The \code{\link{makeReferencePanel}} can be used to generate such a panel.}
+
+\item{ref_anc}{Same as \code{ref_cts} but for anchor sites.}
 
 \item{weight_cts}{A numeric value indicating the weights that should be put on cell type-specific
 sites/regions. Default is 0.5.}

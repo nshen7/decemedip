@@ -8,8 +8,7 @@
 #' @param sample_paired A logic value that indicates sample_paired-end reads (if TRUE) or single-end
 #' reads (if FALSE).
 #' @param roi A \code{GRanges} object that contains the genomic coordinates of the region
-#' of interest (ROI). Default is a \code{GRanges} object that contains the default reference set of
-#' cell type-specific CpGs.
+#' of interest (ROI).
 #' @param col_data A \code{DataFrame} object that contains metadata for columns (i.e.,
 #' samples) if specified. Default is NULL. If not NULL, please make sure that
 #' rows of \code{col_data} corresponds to elements of sample_bam_files. If input is a
@@ -51,7 +50,7 @@ getRoiReadCount <- function(
     sample_bam_files,
     sample_names,
     sample_paired,
-    roi = granges(hg19.ref.cts.se),
+    roi,
     col_data = NULL,
     row_data = NULL,
     bs_genome = 'BSgenome.Hsapiens.UCSC.hg19',
