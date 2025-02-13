@@ -19,7 +19,6 @@ Depends:
     R (>= 4.4.0)
 Imports: 
     bayesplot,
-    BiocStyle,
     cowplot,
     dplyr,
     GenomicRanges,
@@ -48,5 +47,7 @@ LinkingTo:
 SystemRequirements: GNU make
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    BiocStyle,
+    devtools
 VignetteBuilder: knitr
