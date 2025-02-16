@@ -40,15 +40,26 @@
 #' @export
 #'
 #' @examples
-#' gr <- GenomicRanges::GRanges(
-#'   seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),      # Chromosome names
-#'   ranges = IRanges::IRanges(start = c(101123, 203456, 987654), # Start positions
-#'                             end = c(101125, 203458, 987656)),  # End positions
-#'   cpg_id = c("CpG_001", "CpG_002", "CpG_003")      # CpG site IDs
+#'
+#' row_ranges <- GenomicRanges::GRanges(
+#'   seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),
+#'   ranges = IRanges::IRanges(start = c(100, 200, 300),
+#'                             end = c(100, 200, 300)),
+#'   cpg_id = c("cpg_1", "cpg_2", "cpg_3")      # CpG site IDs
 #' )
+#'
+#' cpg_coords = GenomicRanges::GRanges(
+#'   seqnames = S4Vectors::Rle(c("chr1", "chr1", "chr2", "chr2", "chr3", "chr3")),
+#'   ranges = IRanges::IRanges(start = c(100, 101, 200, 201, 300, 301),
+#'                             end = c(100, 101, 200, 201, 300, 301))
+#' )
+#'
+#' X = matrix(runif(6), nrow = 3)
+#'
 #' makeReferencePanel(
-#'   row_ranges = gr,
-#'   X = matrix(runif(6), nrow = 3)
+#'   row_ranges = row_ranges,
+#'   X = X,
+#'   cpg_coords = cpg_coords
 #' )
 #'
 makeReferencePanel <- function(
