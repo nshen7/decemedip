@@ -14,10 +14,18 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' output <- decemedip(sample_bam_file = 'dir/to/bam/file',  paired = TRUE)
+#'
+#' data(pdx.counts.cts.se)
+#' data(pdx.counts.anc.se)
+#' # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+#' counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
+#' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
+#' counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
+#' # Fit decemedip model (iter=10 for demonstration, by default iter=2000)
+#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 10)
+#'
 #' smr_pi.df <- getSummaryOnPi(output$posterior)
-#' }
+
 getSummaryOnPi <- function(
     posterior,
     probs = c(0.025, 0.25, 0.5, 0.75, 0.975),

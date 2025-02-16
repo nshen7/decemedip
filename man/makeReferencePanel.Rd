@@ -8,6 +8,7 @@ cell type deconvolution (which is used in \code{decemedip} function)}
 makeReferencePanel(
   row_ranges,
   X,
+  cpg_coords,
   col_names = NULL,
   row_names = NULL,
   col_data = NULL,
@@ -21,6 +22,12 @@ of \emph{reference regions/sites}.}
 \item{X}{A matrix that contains the beta values of reference regions. \strong{Each row
 is a region and each column is a cell type.} If \code{X} has row names or column names,
 the output \code{SummarizedExperiment} object will inherit them.}
+
+\item{cpg_coords}{A \code{GRanges} object that contains genomic coordinates of
+all CpGs in the genome. A ready-to-use CpG list for hg19 is available to download at
+\url{https://github.com/nshen7/decemedip-scripts/blob/main/cpg_coords/hg19.cpg.coords.rda}.
+It is used for generating coloum \code{n_cpg_100bp} in the reference panel, which
+represents CpG density around the reference CpG.}
 
 \item{col_names}{An atomic vector of strings that indicates the column names, i.e.,
 names of the cell types. Default is NULL. If not NULL, the column names of \code{X}

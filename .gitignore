@@ -4,3 +4,5 @@
 decemedip.Rproj
 docs
 inst/doc
+.DS_Store
+*/.DS_Store

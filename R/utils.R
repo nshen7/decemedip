@@ -77,19 +77,6 @@
 #'   hg38.ref.cts.se
 "hg38.ref.cts.se"
 
-#' Genomic information of CpG positions in hg19
-#'
-#' @description This dataset represents a GRanges object that contains the collection
-#' of CpGs in chr1-chr22, chrX and chrY. Each row is a CpG. Information was extracted
-#' from \code{BSgenome.Hsapiens.UCSC.hg19} of package \code{BSgenome}.
-#' @usage data(hg19.cpg.coords)
-#' @format An object of class \code{GRanges}.
-#'
-#' @examples
-#'   data(hg19.cpg.coords)
-#'   hg19.cpg.coords
-"hg19.cpg.coords"
-
 
 #' MeDIP-seq read counts on reference cell type-specific CpGs of 3 PDX samples from Berchuck et al. 2022
 #'
