@@ -56,9 +56,9 @@
 #' data(pdx.counts.cts.se)
 #' data(pdx.counts.anc.se)
 #' # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-#' counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
+#' counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
 #' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
-#' counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
+#' counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
 #' # Fit decemedip model (iter=10 for demonstration, by default iter=2000)
 #' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 10)
 #'

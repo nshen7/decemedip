@@ -100,7 +100,7 @@ head(granges(hg19.ref.cts.se))
 ```{r}
 data(hg19.ref.anc.se)
 print(hg19.ref.anc.se)
-head(granges(hg19.ref.cts.se))
+head(granges(hg19.ref.anc.se))
 ```
 
 
@@ -148,12 +148,12 @@ counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR'] # read counts of 
 
 Due to the vignette running time limit by Bioconductor, we only run 300 iterations (`iter = 300`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
 
-```{r}
+```{r warning=FALSE}
 output <- decemedip(counts_cts = counts_cts,
                     counts_anc = counts_anc,
                     diagnostics = TRUE,
                     cores = 4,
-                    iter = 100)
+                    iter = 200)
 ```
 
 The output of `decemedip()` is a list containing two elements:
@@ -201,7 +201,7 @@ head(smr_pi.df)
   
 Plotting out the fitted cell type proportions with credible intervals:
 
-```{r, fig.fullwidth=TRUE}
+```{r, fig.fullwidth=TRUE, warning=FALSE}
 labels <- gsub('_', ' ', smr_pi.df$cell_type)
 labels <- gsub('(.*) EPIC', '\\1', labels)
 
@@ -226,9 +226,9 @@ smr_pi.df |>
 Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
 The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
 
-```{r, fig.fullwidth=TRUE}
+```{r, fig.fullwidth=TRUE, warning=FALSE}
 plotDiagnostics(output, plot_type = "y_fit") +
-  ylim(0, 200)
+  ylim(0, 300)
 ```
 
 
