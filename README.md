@@ -13,6 +13,16 @@ You can install the development version of `decemedip` in R from
 # install.packages("devtools")
 devtools::install_github("nshen7/decemedip")
 ```
+
+## Usage
+
+An online vignette on the decemedip package can be found at https://rpubs.com/nshen7/how-to-use-decemedip.  
+
+## How to get help for decemedip
+
+If you have questions or suggestions regarding the decemedip package, please feel free raise an issue in this GitHub page or alternatively email the author, Ning, at ning.shen.wk@gmail.com.
+
+
 ## Citation
 
 Manuscript is currently under development.
