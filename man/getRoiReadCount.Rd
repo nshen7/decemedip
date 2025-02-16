@@ -52,7 +52,7 @@ as an assay named 'counts' (can be extracted using \code{SummarizedExperiment::a
 Obtain read counts of regions of interest from MeDIP-seq bam files
 }
 \examples{
-\dontrun{
+\donttest{
 se <- getRoiReadCount(
  sample_bam_files = c('dir/to/bam1','dir/to/bam2'),
  sample_names = c('sample1', 'sample2'),

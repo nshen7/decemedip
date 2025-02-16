@@ -38,7 +38,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' se <- getRoiReadCount(
 #'  sample_bam_files = c('dir/to/bam1','dir/to/bam2'),
 #'  sample_names = c('sample1', 'sample2'),

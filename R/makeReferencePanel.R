@@ -6,6 +6,11 @@
 #' @param X A matrix that contains the beta values of reference regions. \strong{Each row
 #' is a region and each column is a cell type.} If \code{X} has row names or column names,
 #' the output \code{SummarizedExperiment} object will inherit them.
+#' @param cpg_coords A \code{GRanges} object that contains genomic coordinates of
+#' all CpGs in the genome. A ready-to-use CpG list for hg19 is available to download at
+#' \url{https://github.com/nshen7/decemedip-scripts/blob/main/cpg_coords/hg19.cpg.coords.rda}.
+#' It is used for generating coloum `n_cpg_100bp` in the reference panel, which
+#' represents CpG density around the reference CpG.
 #' @param col_names An atomic vector of strings that indicates the column names, i.e.,
 #' names of the cell types. Default is NULL. If not NULL, the column names of \code{X}
 #' will be overwritten by this argument.
@@ -49,6 +54,7 @@
 makeReferencePanel <- function(
     row_ranges,
     X,
+    cpg_coords,
     col_names = NULL,
     row_names = NULL,
     col_data = NULL,
@@ -89,11 +95,10 @@ makeReferencePanel <- function(
   }
 
   ## Include CpG density as covariate
-  data(hg19.cpg.coords)
   rowData(se)$n_cpgs_100bp <- IRanges::countOverlaps(
     GenomicRanges::granges(se) |>
       GenomicRanges::resize(width = 100, fix = 'center'),
-    hg19.cpg.coords)
+    cpg_coords)
 
   return(se)
 }

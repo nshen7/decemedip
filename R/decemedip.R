@@ -53,16 +53,15 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' data(pdx.counts.cts.se)
 #' data(pdx.counts.anc.se)
 #' # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
 #' counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
 #' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
 #' counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
-#' # Fit decemedip model
-#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100)
-#' }
+#' # Fit decemedip model (iter=10 for demonstration, by default iter=2000)
+#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 10)
+#'
 decemedip <- function(
     sample_bam_file = NULL,
     paired_end = NULL,
@@ -106,9 +105,16 @@ decemedip <- function(
   }
 
   ## Checks on reference
-  stopifnot(class(ref_cts) == "RangedSummarizedExperiment")
-  stopifnot(class(ref_anc) == "RangedSummarizedExperiment")
+  if (!is(ref_cts, 'RangedSummarizedExperiment') & !is(ref_cts, 'SummarizedExperiment'))
+    stop('`ref_cts` has to be a RangedSummarizedExperiment or SummarizedExperiment obejct.')
+  if (!is(ref_anc, 'RangedSummarizedExperiment') & !is(ref_anc, 'SummarizedExperiment'))
+    stop('`ref_anc` has to be a RangedSummarizedExperiment or SummarizedExperiment obejct.')
   stopifnot(SummarizedExperiment::ncol(ref_cts) == SummarizedExperiment::ncol(ref_anc))
+
+  if (!'n_cpgs_100bp' %in% colnames(rowData(ref_cts)))
+    stop('Need coloum `n_cpgs_100bp` in `ref_cts`, please use `decemedip::makeReferencePanel` to generate reference panels.')
+  if (!'n_cpgs_100bp' %in% colnames(rowData(ref_anc)))
+    stop('Need coloum `n_cpgs_100bp` in `ref_anc`, please use `decemedip::makeReferencePanel` to generate reference panels.')
 
   ## Checks on stan parameters
   stopifnot(c('s_mu','s_sigma','n_knot_z','degree_z','Xi','s_theta','s_tau') %in% names(stan_input_params))
