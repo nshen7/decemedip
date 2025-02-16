@@ -21,8 +21,8 @@
 #' counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
 #' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
 #' counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
-#' # Fit decemedip model (iter=10 for demonstration, by default iter=2000)
-#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 10)
+#' # Fit decemedip model (iter=100 for demonstration, by default iter=2000)
+#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100)
 #'
 #' smr_pi.df <- getSummaryOnPi(output$posterior)
 
@@ -47,9 +47,9 @@ getSummaryOnPi <- function(
 
   smr_pi.df <- smr_pi.df |>
     as.data.frame() |>
-    mutate(cell_type = factor(cell_type_names, levels = cell_type_names)) |>
-    relocate(cell_type) |>
-    select(1:(7+length(probs)))
+    dplyr::mutate(cell_type = factor(cell_type_names, levels = cell_type_names)) |>
+    dplyr::relocate(cell_type) |>
+    dplyr::select(1:(7+length(probs)))
 
   return(smr_pi.df)
 }
