@@ -25,7 +25,7 @@ the output \code{SummarizedExperiment} object will inherit them.}
 
 \item{cpg_coords}{A \code{GRanges} object that contains genomic coordinates of
 all CpGs in the genome. A ready-to-use CpG list for hg19 is available to download at
-\url{https://github.com/nshen7/decemedip-scripts/blob/main/cpg_coords/hg19.cpg.coords.rda}.
+\url{https://github.com/nshen7/decemedip-experiments/blob/main/hg19.cpg.coords.rda}.
 It is used for generating coloum \code{n_cpg_100bp} in the reference panel, which
 represents CpG density around the reference CpG.}
 
