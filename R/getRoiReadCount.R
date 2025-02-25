@@ -77,9 +77,9 @@ getRoiReadCount <- function(
 
   .getRoiReadCountPerSample <- function(bam_dir, ...) {
 
-    roi.df <- as.data.frame(roi, row.names = NULL)[, 1:3] %>%
+    roi.df <- as.data.frame(roi, row.names = NULL)[, 1:3] |>
       dplyr::rename('chr' = 'seqnames') |>
-      dplyr::mutate(name = 1:length(roi))
+      dplyr::mutate(name = seq_len(length(roi)))
     count_per <- MEDIPS::MEDIPS.createROIset(
       file = bam_dir,
       ROI = roi.df,
