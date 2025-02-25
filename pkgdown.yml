@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   how-to-use-decemedip: how-to-use-decemedip.html
-last_built: 2025-02-25T04:30Z
+last_built: 2025-02-25T04:57Z
 urls:
   reference: https://nshen7.github.io/decemedip/reference
   article: https://nshen7.github.io/decemedip/articles
