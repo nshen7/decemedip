@@ -7,18 +7,13 @@ author:
   - Centre for Molecular Medicine and Therapeutics, BC Children's Hospital Research Institute
   email: ning.shen.wk@gmail.com
 output: 
-  # html_document:
-  #   toc: yes
-  #   toc_float: true
-  #   collapsed: true
-  #   fig_width: 8
-  #   fig_height: 6
   BiocStyle::html_document:
     titlecaps: false
     toc_float: true
     fig_width: 8
     fig_height: 6
     number_sections: true
+bibliography: ../inst/references.bib
 vignette: >
   %\VignetteIndexEntry{Cell type deconvolutiond of (cf)MeDIP-seq data with decemedip}
   %\VignetteEngine{knitr::rmarkdown}
@@ -28,15 +23,16 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "##")
+  comment = "##"
+)
 ```
 
 
 # Citation
 
-**If you use decemedip in published research, please cite: **
+**If you use decemedip in published research, please cite @shen2025decemedip, or: **
 
-Shen, Ning, and Keegan Korthauer. "decemedip: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylome" bioRxiv, forthcoming.
+Shen N, Zhang Z, Baca S, Korthauer K. decemedip: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylomes. bioRxiv. 2025:2025-05.
 
 
 # Installation
@@ -45,10 +41,7 @@ This package will be submitted to Bioconductor. For now, you can install the dev
 
 ```{r installation, eval = FALSE}
 # Install stable version from Bioconductor (once available)
-# BiocManager::install("decemedip")
-
-# Install development version from GitHub
-remotes::install_github("nshen7/decemedip")
+BiocManager::install("decemedip")
 ```
 
 After installation, load the decemedip package:
@@ -59,10 +52,6 @@ library(dplyr)
 library(ggplot2)
 library(decemedip)
 options(digits = 2)
-```
-
-```{r, include = FALSE}
-devtools::load_all('..')
 ```
 
 # Background
@@ -121,19 +110,18 @@ paired <- TRUE # whether the sequencing is paired-end
 ```
 
 ```{r eval=FALSE}
-output <- decemedip(sample_bam_file = sample_bam_file, 
-                    paired = paired, 
-                    cores = 4)
+output <- decemedip(
+  sample_bam_file = sample_bam_file,
+  paired = paired,
+  cores = 4
+)
 ```
 
 PS: By default, the `decemedip()` function uses a hg19 reference panel. But users may add the arguments `ref_cts = hg38.ref.cts.se, ref_anc = hg38.ref.anc.se` to apply read counts extraction on hg38 data.
 
 ## Input with read counts
 
-We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the Berchuck et al. 2022 [1] study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demonstrate the output and diagnostics in this vignette. 
-
-[1] Berchuck JE, Baca SC, McClure HM, Korthauer K, Tsai HK, Nuzzo PV, et al. Detecting neuroendocrine prostate cancer through tissue-informed cell-free DNA methylation analysis. Clinical Cancer Research. 2022;28(5):928–938.
-
+We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the @berchuck2022detecting study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demonstrate the output and diagnostics in this vignette. 
 
 ```{r}
 data(pdx.counts.cts.se)
@@ -142,18 +130,22 @@ data(pdx.counts.anc.se)
 
 We extract the sample `LuCaP_147CR` from this example dataset for follwing illustration:
 ```{r}
-counts_cts <- assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR'] # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_anc <- assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR'] # read counts of anchor CpGs of the sample 'LuCaP_147CR'
+# read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+counts_cts <- assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"] 
+# read counts of anchor CpGs of the sample 'LuCaP_147CR'
+counts_anc <- assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"] 
 ```
 
-Due to the vignette running time limit by Bioconductor, we only run 300 iterations (`iter = 300`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
+Due to the vignette running time limit by Bioconductor, we only run 200 iterations (`iter = 200`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
 
 ```{r warning=FALSE}
-output <- decemedip(counts_cts = counts_cts,
-                    counts_anc = counts_anc,
-                    diagnostics = TRUE,
-                    cores = 4,
-                    iter = 200)
+output <- decemedip(
+  counts_cts = counts_cts,
+  counts_anc = counts_anc,
+  diagnostics = TRUE,
+  cores = 4,
+  iter = 200
+)
 ```
 
 The output of `decemedip()` is a list containing two elements:
@@ -202,20 +194,24 @@ head(smr_pi.df)
 Plotting out the fitted cell type proportions with credible intervals:
 
 ```{r, fig.fullwidth=TRUE, warning=FALSE}
-labels <- gsub('_', ' ', smr_pi.df$cell_type)
-labels <- gsub('(.*) EPIC', '\\1', labels)
+labels <- gsub("_", " ", smr_pi.df$cell_type)
+labels <- gsub("(.*) EPIC", "\\1", labels)
 
 smr_pi.df |>
   mutate(cell_type = factor(cell_type, labels = labels)) |>
   ggplot(aes(cell_type, mean)) +
-  geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`), 
-                 position = position_dodge2(width = 0.035),
-                 linewidth = 7, alpha = 0.3) +
-  geom_linerange(aes(ymin = `25%`, ymax = `75%`), 
-                 position = position_dodge2(width = 0.035),
-                 linewidth = 7, alpha = 1) +
-  geom_point(position = position_dodge2(width = 0.035),
-             fill = 'white', shape = 21, size = 8) +
+  geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`),
+    position = position_dodge2(width = 0.035),
+    linewidth = 7, alpha = 0.3
+  ) +
+  geom_linerange(aes(ymin = `25%`, ymax = `75%`),
+    position = position_dodge2(width = 0.035),
+    linewidth = 7, alpha = 1
+  ) +
+  geom_point(
+    position = position_dodge2(width = 0.035),
+    fill = "white", shape = 21, size = 8
+  ) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -242,3 +238,6 @@ The `decemedip` package provides a robust framework for cell type deconvolution 
 ```{r}
 sessionInfo()
 ```
+
+# References
+

@@ -16,8 +16,8 @@
 #' health and disease. \emph{Nat Commun 9, 5068} (2018).
 #'
 #' @examples
-#'   data(hg19.ref.anc.se)
-#'   hg19.ref.anc.se
+#' data(hg19.ref.anc.se)
+#' hg19.ref.anc.se
 "hg19.ref.anc.se"
 
 #' Hg19 genomic information of cell-type-specific marker CpGs inferred from DNA
@@ -42,8 +42,8 @@
 #' https://doi.org/10.1038/s41467-018-07466-6
 #'
 #' @examples
-#'   data(hg19.ref.cts.se)
-#'   hg19.ref.cts.se
+#' data(hg19.ref.cts.se)
+#' hg19.ref.cts.se
 "hg19.ref.cts.se"
 
 #' Hg38 genomic information of cell-type-specific marker CpGs inferred from DNA
@@ -57,8 +57,8 @@
 #' @format An object of class \code{GRanges}.
 #'
 #' @examples
-#'   data(hg38.ref.anc.se)
-#'   hg38.ref.anc.se
+#' data(hg38.ref.anc.se)
+#' hg38.ref.anc.se
 "hg38.ref.anc.se"
 
 
@@ -73,8 +73,8 @@
 #' @format An object of class \code{GRanges}.
 #'
 #' @examples
-#'   data(hg38.ref.cts.se)
-#'   hg38.ref.cts.se
+#' data(hg38.ref.cts.se)
+#' hg38.ref.cts.se
 "hg38.ref.cts.se"
 
 
@@ -89,8 +89,8 @@
 #' @details All coordinates are in hg19.
 #'
 #' @examples
-#'   data(pdx.counts.cts.se)
-#'   pdx.counts.cts.se
+#' data(pdx.counts.cts.se)
+#' pdx.counts.cts.se
 "pdx.counts.cts.se"
 
 #' MeDIP-seq read counts on reference anchor CpGs of 3 PDX samples from Berchuck et al. 2022
@@ -104,7 +104,6 @@
 #' @details All coordinates are in hg19.
 #'
 #' @examples
-#'   data(pdx.counts.anc.se)
-#'   pdx.counts.anc.se
+#' data(pdx.counts.anc.se)
+#' pdx.counts.anc.se
 "pdx.counts.anc.se"
-

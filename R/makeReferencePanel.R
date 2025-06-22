@@ -1,30 +1,30 @@
 #' Function for assembling a SummarizedExperiment object of reference panel in \strong{hg19} for
-#' cell type deconvolution (which is used in \code{decemedip} function)
+#' cell type deconvolution (which is used in `decemedip` function)
 #'
-#' @param row_ranges A \code{GRanges} object that contains the genomic coordinates
+#' @param row_ranges A `GRanges` object that contains the genomic coordinates
 #' of \emph{reference regions/sites}.
-#' @param X A matrix that contains the beta values of reference regions. \strong{Each row
-#' is a region and each column is a cell type.} If \code{X} has row names or column names,
-#' the output \code{SummarizedExperiment} object will inherit them.
-#' @param cpg_coords A \code{GRanges} object that contains genomic coordinates of
+#' @param beta_matrix A matrix that contains the beta values of reference regions. \strong{Each row
+#' is a region and each column is a cell type.} If `beta_matrix` has row names or column names,
+#' the output `SummarizedExperiment` object will inherit them.
+#' @param cpg_coords A `GRanges` object that contains genomic coordinates of
 #' all CpGs in the genome. A ready-to-use CpG list for hg19 is available to download at
 #' \url{https://github.com/nshen7/decemedip-experiments/blob/main/hg19.cpg.coords.rda}.
 #' It is used for generating coloum `n_cpg_100bp` in the reference panel, which
 #' represents CpG density around the reference CpG.
 #' @param col_names An atomic vector of strings that indicates the column names, i.e.,
-#' names of the cell types. Default is NULL. If not NULL, the column names of \code{X}
+#' names of the cell types. Default is NULL. If not NULL, the column names of `beta_matrix`
 #' will be overwritten by this argument.
 #' @param row_names An atomic vector of strings that indicates the row names, i.e.,
-#' names of the reference regions. Default is NULL. If not NULL, the row names of \code{X}
+#' names of the reference regions. Default is NULL. If not NULL, the row names of `beta_matrix`
 #' will be overwritten by this argument.
-#' @param col_data A \code{DataFrame} object that contains metadata for columns (i.e.,
-#' cell types) if specified. Each row in \code{col_data} should contain info of a cell type
-#' in \code{X}. If input is a non-\code{DataFrame} object, it will be converted
-#' to a \code{DataFrame}. Default is NULL.
-#' @param row_data A \code{DataFrame} object that contains metadata for row (i.e.,
-#' reference regions) if specified. Each row in \code{row_data} should contain info of a
-#' reference region in \code{X}. If input is a non-\code{DataFrame} object, it will
-#' be converted to a \code{DataFrame}. Default is NULL.
+#' @param col_data A `DataFrame` object that contains metadata for columns (i.e.,
+#' cell types) if specified. Each row in `col_data` should contain info of a cell type
+#' in `beta_matrix}. If input is a non-\code{DataFrame` object, it will be converted
+#' to a `DataFrame`. Default is NULL.
+#' @param row_data A `DataFrame` object that contains metadata for row (i.e.,
+#' reference regions) if specified. Each row in `row_data` should contain info of a
+#' reference region in `beta_matrix}. If input is a non-\code{DataFrame` object, it will
+#' be converted to a `DataFrame`. Default is NULL.
 #'
 #' @importFrom methods is
 #' @importFrom S4Vectors DataFrame
@@ -35,66 +35,73 @@
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @importClassesFrom GenomicRanges GRanges
 #'
-#' @return An \code{SummarizedExperiment} object with each row represents a reference region
-#' and an assay named 'X' that stores the beta values of reference regions.
+#' @return An `SummarizedExperiment` object with each row represents a reference region
+#' and an assay named 'beta_matrix' that stores the beta values of reference regions.
 #' @export
 #'
 #' @examples
 #'
 #' row_ranges <- GenomicRanges::GRanges(
 #'   seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),
-#'   ranges = IRanges::IRanges(start = c(100, 200, 300),
-#'                             end = c(100, 200, 300)),
-#'   cpg_id = c("cpg_1", "cpg_2", "cpg_3")      # CpG site IDs
+#'   ranges = IRanges::IRanges(
+#'     start = c(100, 200, 300),
+#'     end = c(100, 200, 300)
+#'   ),
+#'   cpg_id = c("cpg_1", "cpg_2", "cpg_3") # CpG site IDs
 #' )
 #'
-#' cpg_coords = GenomicRanges::GRanges(
+#' cpg_coords <- GenomicRanges::GRanges(
 #'   seqnames = S4Vectors::Rle(c("chr1", "chr1", "chr2", "chr2", "chr3", "chr3")),
-#'   ranges = IRanges::IRanges(start = c(100, 101, 200, 201, 300, 301),
-#'                             end = c(100, 101, 200, 201, 300, 301))
+#'   ranges = IRanges::IRanges(
+#'     start = c(100, 101, 200, 201, 300, 301),
+#'     end = c(100, 101, 200, 201, 300, 301)
+#'   )
 #' )
 #'
-#' X = matrix(runif(6), nrow = 3)
+#' beta_matrix <- matrix(runif(6), nrow = 3)
 #'
 #' makeReferencePanel(
 #'   row_ranges = row_ranges,
-#'   X = X,
+#'   beta_matrix = beta_matrix,
 #'   cpg_coords = cpg_coords
 #' )
 #'
 makeReferencePanel <- function(
     row_ranges,
-    X,
+    beta_matrix,
     cpg_coords,
     col_names = NULL,
     row_names = NULL,
     col_data = NULL,
-    row_data = NULL
-) {
+    row_data = NULL) {
+  if (length(row_ranges) != nrow(beta_matrix))
+    stop("Length of `row_ranges` is not equal to number of rows in `beta_matrix`!")
 
-  if (length(row_ranges) != nrow(X)) stop('Length of `row_ranges` is not equal to number of rows in `X`!')
-
-  if (!is.null(col_data) & !methods::is(col_data, 'DataFrame')) {
-    message('col_data is being converted to a DataFrame object.')
+  if (!is.null(col_data) & !methods::is(col_data, "DataFrame")) {
+    message("col_data is being converted to a DataFrame object.")
     col_data <- DataFrame(col_data)
   }
-  if (!is.null(row_data) & !methods::is(row_data, 'DataFrame')) {
-    message('row_data is being converted to a DataFrame object.')
+  if (!is.null(row_data) & !methods::is(row_data, "DataFrame")) {
+    message("row_data is being converted to a DataFrame object.")
     row_data <- DataFrame(row_data)
   }
-  if (!is.null(col_names))
-    stopifnot('The length of `col_names` not equal to number of columns in X.' = length(col_names) == ncol(X))
-  if (!is.null(row_names))
-    stopifnot('The length of `row_names` not equal to number of rows in X.' = length(row_names) == nrow(X))
-  if (!is.null(col_data))
-    stopifnot('The number of rows in col_data not equal to number of columns in X.' = nrow(col_data) == ncol(X))
-  if (!is.null(row_data))
-    stopifnot('The number of rows in row_data not equal to number of rows in X.' = nrow(row_data) == nrow(X))
+  if (!is.null(col_names)) {
+    stopifnot("The length of `col_names` not equal to number of columns in beta_matrix." = length(col_names) == ncol(beta_matrix))
+  }
+  if (!is.null(row_names)) {
+    stopifnot("The length of `row_names` not equal to number of rows in beta_matrix." = length(row_names) == nrow(beta_matrix))
+  }
+  if (!is.null(col_data)) {
+    stopifnot("The number of rows in col_data not equal to number of columns in beta_matrix." = nrow(col_data) == ncol(beta_matrix))
+  }
+  if (!is.null(row_data)) {
+    stopifnot("The number of rows in row_data not equal to number of rows in beta_matrix." = nrow(row_data) == nrow(beta_matrix))
+  }
 
-  if (!is.null(col_names)) colnames(X) <- col_names
-  if (!is.null(row_names)) rownames(X) <- row_names
+  if (!is.null(col_names)) colnames(beta_matrix) <- col_names
+  if (!is.null(row_names)) rownames(beta_matrix) <- row_names
 
-  se <- SummarizedExperiment::SummarizedExperiment(rowRanges = row_ranges, assays = list(beta = X))
+  se <- SummarizedExperiment::SummarizedExperiment(rowRanges = row_ranges, assays = list(beta = beta_matrix))
 
   if (!is.null(col_data)) {
     if (!is.null(col_names)) rownames(col_data) <- col_names
@@ -108,8 +115,9 @@ makeReferencePanel <- function(
   ## Include CpG density as covariate
   rowData(se)$n_cpgs_100bp <- IRanges::countOverlaps(
     GenomicRanges::granges(se) |>
-      GenomicRanges::resize(width = 100, fix = 'center'),
-    cpg_coords)
+      GenomicRanges::resize(width = 100, fix = "center"),
+    cpg_coords
+  )
 
   return(se)
 }

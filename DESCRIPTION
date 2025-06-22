@@ -17,7 +17,6 @@ biocViews: Software, ImmunoOncology, DNAMethylation, Epigenetics, Sequencing,
   WholeGenome
 Biarch: true
 Depends: 
-    R (>= 4.4.0)
 Imports: 
     bayesplot,
     cowplot,
@@ -32,10 +31,10 @@ Imports:
     methods,
     purrr,
     R.utils,
-    Rcpp (>= 0.12.0),
-    RcppParallel (>= 5.0.1),
-    rstan (>= 2.18.1),
-    rstantools (>= 2.4.0),
+    Rcpp,
+    RcppParallel,
+    rstan,
+    rstantools,
     S4Vectors,
     SummarizedExperiment
 LinkingTo: 
@@ -54,3 +53,5 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+URL: https://github.com/nshen7/decemedip
+BugReports: https://github.com/nshen7/decemedip/issues
