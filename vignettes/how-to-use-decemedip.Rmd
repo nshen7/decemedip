@@ -61,7 +61,7 @@ Cell-free and bulk DNA methylation data obtained through MeDIP-seq reflect a mix
 decemedip couples a logit-normal model with a generalize additive model (GAM) framework. For each site $i \in \{1, ..., N\}$ in the reference panel, the input to the model is the fractional methylation levels $x_{ik}$ for each cell type $k \in \{1, ..., K\}$, the CpG density level $z_i$ and the MeDIP-seq read count $y_i$, where $K$ is the total number of cell types. A unit simplex variable that follows a logit-normal prior, $\boldsymbol{\pi} = (\pi_1, ..., \pi_K)$ where $\pi_k > 0, \sum_{k=1}^K \pi_k = 1$, is included to describe the proportions of cell types in the reference panel while taking into account the correlations between these cell types.
 
 ```{r, fig.retina = NULL, fig.align='center', fig.wide = TRUE, echo=FALSE}
-knitr::include_graphics("../man/figures/method_main_figure.png", dpi = 300)
+knitr::include_graphics(system.file("vignettes/figures/method_main_figure.png", package = "decemedip"), dpi = 300)
 ```
 
 # Input Data
