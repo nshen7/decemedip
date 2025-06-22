@@ -61,6 +61,7 @@
 #' counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
 #' \dontrun{
 #' # Fit decemedip model (iter=100 for demonstration, by default iter=2000)
+#' \donttest{
 #' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
 #' }
 #'
