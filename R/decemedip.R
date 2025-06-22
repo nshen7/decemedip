@@ -126,8 +126,8 @@ decemedip <- function(
 
   ## Checks on exclusivity of counts and bam files
   if (!is.null(sample_bam_file) | !is.null(paired_end)) {
-    if (is.null(sample_bam_file)) stop("Please input 'sample_bam_file'")
-    if (is.null(paired_end)) stop("Please input 'paired_end'")
+    if (is.null(sample_bam_file)) stop("Please input 'sample_bam_file'.")
+    if (is.null(paired_end)) stop("Please input 'paired_end'.")
     if (length(counts_cts) != 0) stop("Invalid: Both counts and bam files are received as input.")
     if (length(counts_anc) != 0) stop("Invalid: Both counts and bam files are received as input.")
   }
