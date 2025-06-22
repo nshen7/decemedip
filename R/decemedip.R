@@ -128,8 +128,8 @@ decemedip <- function(
   if (!is.null(sample_bam_file) | !is.null(paired_end)) {
     if (is.null(sample_bam_file)) stop("Please input 'sample_bam_file'")
     if (is.null(paired_end)) stop("Please input 'paired_end'")
-    if (length(counts_cts) != 0) stop("Invalid: Both counts and bam files are received as input")
-    if (length(counts_anc) != 0) stop("Invalid: Both counts and bam files are received as input")
+    if (length(counts_cts) != 0) stop("Invalid: Both counts and bam files are received as input.")
+    if (length(counts_anc) != 0) stop("Invalid: Both counts and bam files are received as input.")
   }
   if (length(counts_cts) > 0 | length(counts_anc) > 0) {
     # check whether dim aligns with reference
@@ -139,8 +139,8 @@ decemedip <- function(
     stopifnot(all(counts_cts == floor(counts_cts)) && is.numeric(counts_cts))
     stopifnot(all(counts_anc == floor(counts_anc)) && is.numeric(counts_anc))
     # check on exclusivity of counts and bam files
-    if (!is.null(sample_bam_file)) stop("Invalid: Both counts and bam files are received as input")
-    if (!is.null(paired_end)) stop("Invalid: Both counts and bam files are received as input")
+    if (!is.null(sample_bam_file)) stop("Invalid: Both counts and bam files are received as input.")
+    if (!is.null(paired_end)) stop("Invalid: Both counts and bam files are received as input.")
   }
 
   ## Load read counts of reference sites if bam file is provided
@@ -153,7 +153,7 @@ decemedip <- function(
 
   ## Check for low coverage or unusual high counts
   if (sum(counts_cts) < 0.25 * length(counts_cts)) {
-    warning("Unusual low coverage for cell type-specific reference sites!", immediate. = TRUE)
+    warning("Unusual low coverage for cell type-specific reference sites.", immediate. = TRUE)
   }
 
   ## Prepare model variables
