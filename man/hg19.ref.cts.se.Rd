@@ -25,8 +25,8 @@ of how the marker CpGs are selected, please refer to the decemedip manuscript.
 All coordinates are in hg19.
 }
 \examples{
-  data(hg19.ref.cts.se)
-  hg19.ref.cts.se
+data(hg19.ref.cts.se)
+hg19.ref.cts.se
 }
 \references{
 Moss, J., Magenheim, J., Neiman, D. et al. Comprehensive human

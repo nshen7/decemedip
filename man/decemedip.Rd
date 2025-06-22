@@ -16,11 +16,11 @@ decemedip(
   weight_anc = 0.5,
   diagnostics = TRUE,
   seed = 2024,
-  cores = 4,
+  cores = 1,
   chains = 4,
   iter = 2000,
   stan_input_params = list(s_mu = 3, s_sigma = 3, n_knot_z = 0, degree_z = 3, Xi =
-    cor(as.matrix(SummarizedExperiment::assays(ref_cts)[[1]])), s_theta = 3, s_tau = 3),
+    cor(as.matrix(SummarizedExperiment::assay((ref_cts)))), s_theta = 3, s_tau = 3),
   stan_control = list(adapt_delta = 0.95, max_treedepth = 15),
   timeout_sec = 2 * (diagnostics + 1) * iter * chains,
   max_retries = 3,
@@ -33,7 +33,7 @@ MeDIP-seq sample of interest. If \code{sample_bam_file} is specified, please do 
 specify \code{counts_cts} and \code{counts_anc} to avoid conflict.}
 
 \item{paired_end}{A logic value that indicates whether the bam file is from paired-end
-reads or single-end. Specify \code{TRUE} for paired-end and \code{FALSE} for single-end.}
+reads or single-end. Specify \verb{TRUE\} for paired-end and \code\{FALSE} for single-end.}
 
 \item{counts_cts}{An atomic vector of integer values that indicates the read counts of
 a MeDIP-seq sample on reference sites/regions. If \code{counts_cts} and \code{counts_anc}
@@ -50,7 +50,7 @@ reference panel by using the \code{ref_cts} and \code{ref_anc} arguments.}
 
 \item{ref_cts}{A \code{SummarizedExperiment} object that contains the genomic coordinates and
 beta values of the cell type-specific sites/regions from reference cell types.
-The \code{\link{makeReferencePanel}} can be used to generate such a panel.}
+The \verb{\link{makeReferencePanel}} can be used to generate such a panel.}
 
 \item{ref_anc}{Same as \code{ref_cts} but for anchor sites.}
 
@@ -62,12 +62,12 @@ sites/regions. Default is 1.}
 
 \item{diagnostics}{A logic value that indicates whether to include components of the stan model
 in the output that are necessary for future diagnostics of the model, such as posterior
-predictive checks. For details, please refer to the function \code{\link{plotDiagnostics}}.}
+predictive checks. For details, please refer to the function \verb{\link{plotDiagnostics}}.}
 
 \item{seed}{The seed for random number generation in MCMC sampling.}
 
 \item{cores}{A positive integer specifying the number of cores that can be used for
-MCMC sampling. The default is 4}
+MCMC sampling. The default is 1.}
 
 \item{chains}{A positive integer specifying the number of Markov chains. The default is 4.}
 
@@ -78,7 +78,7 @@ warmup). The default is 2000.}
 decemedip model.}
 
 \item{stan_control}{A named list of parameters to control the sampler's behavior in
-Stan. See the details in the documentation for the control argument in \code{\link[rstan]{stan}}.}
+Stan. See the details in the documentation for the control argument in \verb{\link[rstan]\{stan\}}.}
 
 \item{timeout_sec}{A numerical value indicating the CPU/processor time (in seconds) allowed for
 the MCMC to run before restarting the chains with a new random seed.}
@@ -86,7 +86,7 @@ the MCMC to run before restarting the chains with a new random seed.}
 \item{max_retries}{An integer value indicating the maximum number of tries with different seed
 for MCMC if it fails to converge.}
 
-\item{...}{Other parameters that can be passed to the \code{\link[rstan]{sampling}} function.}
+\item{...}{Other parameters that can be passed to the \verb{\link[rstan]\{sampling\}} function.}
 }
 \value{
 A list of two elements:
@@ -97,15 +97,4 @@ A list of two elements:
 }
 \description{
 Main function to perform cell type deconvolution with MeDIP-seq data
-}
-\examples{
-data(pdx.counts.cts.se)
-data(pdx.counts.anc.se)
-# read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
-# read counts of anchor CpGs of the sample 'LuCaP_147CR'
-counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
-# Fit decemedip model (iter=100 for demonstration, by default iter=2000)
-output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
-
 }

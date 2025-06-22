@@ -14,6 +14,14 @@ technologies such as microarray or WGBS.
 \references{
 Stan Development Team (NA). RStan: the R interface to Stan. R package version 2.32.6. https://mc-stan.org
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/nshen7/decemedip}
+  \item Report bugs at \url{https://github.com/nshen7/decemedip/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Ning Shen \email{ning.shen.wk@gmail.com} (\href{https://orcid.org/0000-0002-2974-1086}{ORCID})
 

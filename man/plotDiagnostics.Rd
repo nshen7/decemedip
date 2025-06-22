@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotDiagnostics.R
 \name{plotDiagnostics}
 \alias{plotDiagnostics}
-\title{Diagnostics for model fitting in \code{\link{decemedip}}}
+\title{Diagnostics for model fitting in \code{\link[=decemedip]{decemedip()}}}
 \usage{
 plotDiagnostics(
   decemedip_output,
@@ -14,7 +14,7 @@ plotDiagnostics(
 )
 }
 \arguments{
-\item{decemedip_output}{The output from \code{\link{decemedip}} function.}
+\item{decemedip_output}{The output from \code{\link[=decemedip]{decemedip()}} function.}
 
 \item{plot_type}{A string value, either 'y_fit' or 'model_fit'. \code{plot_type='y_fit'}
 provides the fitted MeDIP-seq read counts vs. fractional methylation values,
@@ -27,31 +27,34 @@ plotting the diagnostic plots of stan fit. For \code{plot_type = 'model_fit'}
 only.}
 
 \item{model_fit_label_size}{Label size in the plot grid. For \code{plot_type = 'model_fit'}
-only. See the argument \code{label_size} in \code{\link[cowplot]{plot_grid}} for details.}
+only. See the argument \code{label_size} in \link[cowplot:plot_grid]{cowplot::plot_grid} for details.}
 
 \item{model_fit_align}{Specifies how graphs in the grid should be aligned. See
-the argument \code{align} in \code{\link[cowplot]{plot_grid}} for details.}
+the argument \code{align} in \link[cowplot:plot_grid]{cowplot::plot_grid} for details.}
 
-\item{...}{Additional arguments to be fed into \code{\link[cowplot]{plot_grid}}
+\item{...}{Additional arguments to be fed into \link[cowplot:plot_grid]{cowplot::plot_grid}
 in the case of \code{plot_type = 'model_fit'}.}
 }
 \value{
 An \code{ggplot} object.
 }
 \description{
-Diagnostics for model fitting in \code{\link{decemedip}}
+Diagnostics for model fitting in \code{\link[=decemedip]{decemedip()}}
 }
 \examples{
 
 data(pdx.counts.cts.se)
 data(pdx.counts.anc.se)
 # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[,'LuCaP_147CR']
+counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"]
 # read counts of anchor CpGs of the sample 'LuCaP_147CR'
-counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[,'LuCaP_147CR']
+counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
+
+\dontrun{
 # Fit decemedip model (iter=100 for demonstration, by default iter=2000)
 output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
 
 plotDiagnostics(output, plot_type = "y_fit")
+}
 
 }

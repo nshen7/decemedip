@@ -21,7 +21,7 @@ Same as \code{data(hg19.ref.anc.se)} but lifted over to hg38.
 All coordinates are in hg38.
 }
 \examples{
-  data(hg38.ref.anc.se)
-  hg38.ref.anc.se
+data(hg38.ref.anc.se)
+hg38.ref.anc.se
 }
 \keyword{datasets}

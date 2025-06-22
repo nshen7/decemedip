@@ -19,7 +19,7 @@ et al. 2022. Each row is a CpG.
 All coordinates are in hg19.
 }
 \examples{
-  data(pdx.counts.cts.se)
-  pdx.counts.cts.se
+data(pdx.counts.cts.se)
+pdx.counts.cts.se
 }
 \keyword{datasets}

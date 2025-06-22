@@ -7,7 +7,7 @@ cell type deconvolution (which is used in \code{decemedip} function)}
 \usage{
 makeReferencePanel(
   row_ranges,
-  X,
+  beta_matrix,
   cpg_coords,
   col_names = NULL,
   row_names = NULL,
@@ -19,8 +19,8 @@ makeReferencePanel(
 \item{row_ranges}{A \code{GRanges} object that contains the genomic coordinates
 of \emph{reference regions/sites}.}
 
-\item{X}{A matrix that contains the beta values of reference regions. \strong{Each row
-is a region and each column is a cell type.} If \code{X} has row names or column names,
+\item{beta_matrix}{A matrix that contains the beta values of reference regions. \strong{Each row
+is a region and each column is a cell type.} If \code{beta_matrix} has row names or column names,
 the output \code{SummarizedExperiment} object will inherit them.}
 
 \item{cpg_coords}{A \code{GRanges} object that contains genomic coordinates of
@@ -30,26 +30,26 @@ It is used for generating coloum \code{n_cpg_100bp} in the reference panel, whic
 represents CpG density around the reference CpG.}
 
 \item{col_names}{An atomic vector of strings that indicates the column names, i.e.,
-names of the cell types. Default is NULL. If not NULL, the column names of \code{X}
+names of the cell types. Default is NULL. If not NULL, the column names of \code{beta_matrix}
 will be overwritten by this argument.}
 
 \item{row_names}{An atomic vector of strings that indicates the row names, i.e.,
-names of the reference regions. Default is NULL. If not NULL, the row names of \code{X}
+names of the reference regions. Default is NULL. If not NULL, the row names of \code{beta_matrix}
 will be overwritten by this argument.}
 
 \item{col_data}{A \code{DataFrame} object that contains metadata for columns (i.e.,
 cell types) if specified. Each row in \code{col_data} should contain info of a cell type
-in \code{X}. If input is a non-\code{DataFrame} object, it will be converted
+in \verb{beta_matrix\}. If input is a non-\code\{DataFrame} object, it will be converted
 to a \code{DataFrame}. Default is NULL.}
 
 \item{row_data}{A \code{DataFrame} object that contains metadata for row (i.e.,
 reference regions) if specified. Each row in \code{row_data} should contain info of a
-reference region in \code{X}. If input is a non-\code{DataFrame} object, it will
+reference region in \verb{beta_matrix\}. If input is a non-\code\{DataFrame} object, it will
 be converted to a \code{DataFrame}. Default is NULL.}
 }
 \value{
 An \code{SummarizedExperiment} object with each row represents a reference region
-and an assay named 'X' that stores the beta values of reference regions.
+and an assay named 'beta_matrix' that stores the beta values of reference regions.
 }
 \description{
 Function for assembling a SummarizedExperiment object of reference panel in \strong{hg19} for
@@ -59,22 +59,26 @@ cell type deconvolution (which is used in \code{decemedip} function)
 
 row_ranges <- GenomicRanges::GRanges(
   seqnames = S4Vectors::Rle(c("chr1", "chr2", "chr3")),
-  ranges = IRanges::IRanges(start = c(100, 200, 300),
-                            end = c(100, 200, 300)),
-  cpg_id = c("cpg_1", "cpg_2", "cpg_3")      # CpG site IDs
+  ranges = IRanges::IRanges(
+    start = c(100, 200, 300),
+    end = c(100, 200, 300)
+  ),
+  cpg_id = c("cpg_1", "cpg_2", "cpg_3") # CpG site IDs
 )
 
-cpg_coords = GenomicRanges::GRanges(
+cpg_coords <- GenomicRanges::GRanges(
   seqnames = S4Vectors::Rle(c("chr1", "chr1", "chr2", "chr2", "chr3", "chr3")),
-  ranges = IRanges::IRanges(start = c(100, 101, 200, 201, 300, 301),
-                            end = c(100, 101, 200, 201, 300, 301))
+  ranges = IRanges::IRanges(
+    start = c(100, 101, 200, 201, 300, 301),
+    end = c(100, 101, 200, 201, 300, 301)
+  )
 )
 
-X = matrix(runif(6), nrow = 3)
+beta_matrix <- matrix(runif(6), nrow = 3)
 
 makeReferencePanel(
   row_ranges = row_ranges,
-  X = X,
+  beta_matrix = beta_matrix,
   cpg_coords = cpg_coords
 )
 

@@ -23,7 +23,7 @@ sorted bam files.}
 Default is NULL. If not NULL, please make sure that \code{sample_names} corresponds to
 elements of \code{sample_bam_files}.}
 
-\item{sample_paired}{A logic value that indicates sample_paired-end reads (if TRUE) or single-end
+\item{sample_paired}{A logic value that indicates sample_paired-end reads (if \code{TRUE}) or single-end
 reads (if FALSE).}
 
 \item{roi}{A \code{GRanges} object that contains the genomic coordinates of the region
@@ -32,12 +32,12 @@ of interest (ROI).}
 \item{col_data}{A \code{DataFrame} object that contains metadata for columns (i.e.,
 samples) if specified. Default is NULL. If not NULL, please make sure that
 rows of \code{col_data} corresponds to elements of sample_bam_files. If input is a
-non-\code{DataFrame} object, it will be converted to a \code{DataFrame}.}
+non-\verb{DataFrame\} object, it will be converted to a \code\{DataFrame}.}
 
 \item{row_data}{A \code{DataFrame} object that contains metadata for rows (i.e.,
 genomic regions) if specified. Default is NULL. If not NULL, please make sure that
 rows of \code{row_data} corresponds to elements of sample_bam_files. If input is a
-non-\code{DataFrame} object, it will be converted to a \code{DataFrame}.}
+non-\verb{DataFrame\} object, it will be converted to a \code\{DataFrame}.}
 
 \item{bs_genome}{A character value that indicates the reference genome name as
 defined by \code{BSgenome} package. Default is 'BSgenome.Hsapiens.UCSC.hg19'.}
@@ -54,9 +54,9 @@ Obtain read counts of regions of interest from MeDIP-seq bam files
 \examples{
 \donttest{
 se <- getRoiReadCount(
- sample_bam_files = c('dir/to/bam1','dir/to/bam2'),
- sample_names = c('sample1', 'sample2'),
- sample_paired = TRUE
+  sample_bam_files = c("dir/to/bam1", "dir/to/bam2"),
+  sample_names = c("sample1", "sample2"),
+  sample_paired = TRUE
 )
 }
 

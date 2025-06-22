@@ -21,7 +21,7 @@ Same as \code{data(hg19.ref.cts.se)} but lifted over to hg38.
 All coordinates are in hg38.
 }
 \examples{
-  data(hg38.ref.cts.se)
-  hg38.ref.cts.se
+data(hg38.ref.cts.se)
+hg38.ref.cts.se
 }
 \keyword{datasets}

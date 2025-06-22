@@ -22,8 +22,8 @@ GitHub repo (\url{https://github.com/nloyfer/meth_atlas}).
 All coordinates are in hg19.
 }
 \examples{
-  data(hg19.ref.anc.se)
-  hg19.ref.anc.se
+data(hg19.ref.anc.se)
+hg19.ref.anc.se
 }
 \references{
 Moss, J., Magenheim, J., Neiman, D. et al. Comprehensive human
