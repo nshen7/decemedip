@@ -28,12 +28,11 @@
 #' # read counts of anchor CpGs of the sample 'LuCaP_147CR'
 #' counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
 #'
-#' \dontrun{
-#' # Fit decemedip model (iter=100 for demonstration, by default iter=2000)
-#' output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
-#'
-#' plotDiagnostics(output, plot_type = "y_fit")
-#' }
+#' ## The following function is commented due to Bioconductor's time constraints on package building
+#' ## Fit decemedip model (iter=100 for demonstration, by default iter=2000)
+#' # output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
+#' ## Plot diagnostic plots
+#' # plotDiagnostics(output, plot_type = "y_fit")
 #'
 plotDiagnostics <- function(
     decemedip_output,
