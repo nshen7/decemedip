@@ -1,6 +1,6 @@
 Package: decemedip
 Title: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylome
-Version: 0.99.4
+Version: 0.99.5
 Authors@R: 
     person("Ning", "Shen", , "ning.shen.wk@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2974-1086"))
