@@ -138,7 +138,9 @@ counts_anc <- assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
 
 Due to the vignette running time limit by Bioconductor, we only run 200 iterations (`iter = 200`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
 
-```{r warning=FALSE}
+```{r warning=FALSE, eval=FALSE}
+## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
+
 output <- decemedip(
   counts_cts = counts_cts,
   counts_anc = counts_anc,
@@ -148,11 +150,7 @@ output <- decemedip(
 )
 ```
 
-The output of `decemedip()` is a list containing two elements:
-
-```{r}
-names(output)
-```
+The `output` is a list containing two elements:
 
 + `data_list`: An organized list of variables used as input to the Stan posterior sampling function.
 + `posterior`: An `stanfit` object produced by Stan representing the fitted posteriors. 
@@ -170,16 +168,13 @@ library(rstan)
 
 Extract the fitted posterior of cell type proportions ($\boldsymbol\pi$): 
 
-```{r}
+```{r eval=FALSE}
+## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
+
 smr_pi.df <- getSummaryOnPi(output$posterior)
 ```
 
-```{r}
-head(smr_pi.df)
-```
-
-
-+ Summary Statistics Columns:
++ Columns in the `smr_pi.df`:
   + `cell_type`: The name of the parameter or variable being analyzed.
   + `mean`: The posterior mean, representing the point estimate of the parameter.
   + `se_mean`: The standard error of the mean, calculated as sd / sqrt(n_eff), indicating precision of the mean estimate.
@@ -193,7 +188,9 @@ head(smr_pi.df)
   
 Plotting out the fitted cell type proportions with credible intervals:
 
-```{r, fig.fullwidth=TRUE, warning=FALSE}
+```{r, fig.fullwidth=TRUE, warning=FALSE, eval=FALSE}
+## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
+
 labels <- gsub("_", " ", smr_pi.df$cell_type)
 labels <- gsub("(.*) EPIC", "\\1", labels)
 
@@ -222,7 +219,9 @@ smr_pi.df |>
 Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
 The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
 
-```{r, fig.fullwidth=TRUE, warning=FALSE}
+```{r, fig.fullwidth=TRUE, warning=FALSE, eval=FALSE}
+## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
+
 plotDiagnostics(output, plot_type = "y_fit") +
   ylim(0, 300)
 ```
