@@ -29,4 +29,5 @@ If you have questions or suggestions regarding the decemedip package, please fee
 
 ## Citation
 
-Manuscript is currently under development.
+*decemedip: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylomes*. Ning Shen, Ze Zhang, Sylvan Baca, Keegan Korthauer. *bioRxiv* (2025). [https://doi.org/10.1101/2025.05.09.653152](https://doi.org/10.1101/2025.05.09.653152)
+
