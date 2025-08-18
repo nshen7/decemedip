@@ -10,8 +10,8 @@ You can install the development version of `decemedip` in R from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("nshen7/decemedip")
+# install.packages("BiocManager")
+BiocManager::install("decemedip")
 ```
 
 ## Usage
