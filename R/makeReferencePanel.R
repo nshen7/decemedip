@@ -74,8 +74,9 @@ makeReferencePanel <- function(
     row_names = NULL,
     col_data = NULL,
     row_data = NULL) {
-  if (length(row_ranges) != nrow(beta_matrix))
+  if (length(row_ranges) != nrow(beta_matrix)) {
     stop("Length of `row_ranges` is not equal to number of rows in `beta_matrix`!")
+  }
 
   if (!is.null(col_data) & !methods::is(col_data, "DataFrame")) {
     message("col_data is being converted to a DataFrame object.")

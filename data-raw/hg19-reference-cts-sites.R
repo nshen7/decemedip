@@ -9,25 +9,28 @@ library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 anno450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 
 ## CpG coordinates in hg19
-load('data/hg19.cpg.coords.rda')
+load("data/hg19.cpg.coords.rda")
 
 # ---- Load pan-cancer DMR atlas ----
 
-tumor_dmrs.gr <- readxl::read_xlsx(here('..', 'cfMeDIP-deconv-experiments',
-                                        'data', 'metadata',
-                                        'Ibrahim2022_TCGA_tumor_biomarkers',
-                                        'SuppTable4_all_DMR_info.xlsx')) |>
+tumor_dmrs.gr <- readxl::read_xlsx(here(
+  "..", "cfMeDIP-deconv-experiments",
+  "data", "metadata",
+  "Ibrahim2022_TCGA_tumor_biomarkers",
+  "SuppTable4_all_DMR_info.xlsx"
+)) |>
   select(-c(`...1`)) |>
-  rename(V1 = 'dmrName') |>
+  rename(V1 = "dmrName") |>
   makeGRangesFromDataFrame(keep.extra.columns = TRUE)
 seqlevelsStyle(tumor_dmrs.gr) <- "UCSC"
 
 # ---- Load full atlas from MethAtlas ----
 ### NEED INTERNET
-ref_atlas.df <- fread('https://github.com/nloyfer/meth_atlas/raw/master/reference_atlas.csv') |> ## only to obtain colnames
-  rename('CpGs' = 'probe')
-full_atlas_0.df <- fread('https://github.com/nloyfer/meth_atlas/raw/master/full_atlas.csv.gz',
-                       header = F, col.names = colnames(ref_atlas.df)) |>
+ref_atlas.df <- fread("https://github.com/nloyfer/meth_atlas/raw/master/reference_atlas.csv") |> ## only to obtain colnames
+  rename("CpGs" = "probe")
+full_atlas_0.df <- fread("https://github.com/nloyfer/meth_atlas/raw/master/full_atlas.csv.gz",
+  header = F, col.names = colnames(ref_atlas.df)
+) |>
   na.omit() |>
   as.data.frame()
 
@@ -44,21 +47,25 @@ full_beta.df <- full_atlas.df[, -1]
 rownames(full_beta.df) <- full_atlas.df$probe
 
 ## Obtain diff of target and MAX background beta for each cell type
-full_diff_max.df <- full_atlas.df |> select('probe')
-for (i in seq_len(ncol(full_beta.df)))  {
+full_diff_max.df <- full_atlas.df |> select("probe")
+for (i in seq_len(ncol(full_beta.df))) {
   label <- colnames(full_beta.df)[i]
-  beta_tg <- full_beta.df[[ i]]
-  beta_bg <- full_beta.df[, -i] |> as.matrix() |> rowMaxs()
+  beta_tg <- full_beta.df[[i]]
+  beta_bg <- full_beta.df[, -i] |>
+    as.matrix() |>
+    rowMaxs()
   full_diff_max.df[[label]] <- beta_tg - beta_bg
   print(i)
 }
 
 ## Obtain diff of target and MEAN background beta for each cell type
-full_diff_mean.df <- full_atlas.df |> select('probe')
-for (i in seq_len(ncol(full_beta.df)))  {
+full_diff_mean.df <- full_atlas.df |> select("probe")
+for (i in seq_len(ncol(full_beta.df))) {
   label <- colnames(full_beta.df)[i]
-  beta_tg <- full_beta.df[[ i]]
-  beta_bg <- full_beta.df[, -i] |> as.matrix() |> rowMeans()
+  beta_tg <- full_beta.df[[i]]
+  beta_bg <- full_beta.df[, -i] |>
+    as.matrix() |>
+    rowMeans()
   full_diff_mean.df[[label]] <- beta_tg - beta_bg
   print(i)
 }
@@ -93,17 +100,21 @@ K_PER_CT <- 100
 ## target cell type and average background
 getCTSHyperProbes <- function(label, top_k) {
   idx <- which(full_diff_max.df[[label]] > 0)
-  df <- data.frame(probe = full_atlas.df[['probe']][idx],
-                   label = paste0(label, ' hypermethylated'),
-                   diff_mean = full_diff_mean.df[[label]][idx],
-                   diff_max  = full_diff_max.df[[label]][idx]) |>
+  df <- data.frame(
+    probe = full_atlas.df[["probe"]][idx],
+    label = paste0(label, " hypermethylated"),
+    diff_mean = full_diff_mean.df[[label]][idx],
+    diff_max = full_diff_max.df[[label]][idx]
+  ) |>
     group_by(label) |>
     slice_max(order_by = diff_mean, n = top_k)
   return(df)
 }
 
 cts_probes.temp <- map_dfr(colnames(full_diff_max.df)[-1],
-                           getCTSHyperProbes, top_k = K_PER_CT) |>
+  getCTSHyperProbes,
+  top_k = K_PER_CT
+) |>
   select(probe, label)
 ref_cts_beta.temp <- full_beta.df[match(cts_probes.temp$probe, full_atlas.df$probe), ]
 
@@ -125,12 +136,13 @@ all(rownames(ref_cts_beta.df) == ref_cts.df$probe) # = TRUE; all probes correctl
 
 ## Write out
 ref_cts.gr <- makeGRangesFromDataFrame(ref_cts.df, keep.extra.columns = T)
-ref_cts.gr$n_cpgs_100bp <- countOverlaps(ref_cts.gr |> resize(width = 100, fix = 'center'), hg19.cpg.coords)
-ref_cts.se <- SummarizedExperiment(rowData = ref_cts.gr,
-                                   assays = list(beta = ref_cts_beta.df))
+ref_cts.gr$n_cpgs_100bp <- countOverlaps(ref_cts.gr |> resize(width = 100, fix = "center"), hg19.cpg.coords)
+ref_cts.se <- SummarizedExperiment(
+  rowData = ref_cts.gr,
+  assays = list(beta = ref_cts_beta.df)
+)
 
 genome(ref_cts.se) <- "hg19"
 hg19.ref.cts.se <- ref_cts.se
 usethis::use_data(hg19.ref.cts.se, overwrite = TRUE)
 usethis::use_data(hg19.ref.cts.se, overwrite = TRUE, internal = TRUE)
-

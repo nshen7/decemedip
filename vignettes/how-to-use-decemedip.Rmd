@@ -131,9 +131,9 @@ data(pdx.counts.anc.se)
 We extract the sample `LuCaP_147CR` from this example dataset for follwing illustration:
 ```{r}
 # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_cts <- assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"] 
+counts_cts <- assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"]
 # read counts of anchor CpGs of the sample 'LuCaP_147CR'
-counts_anc <- assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"] 
+counts_anc <- assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
 ```
 
 Due to the vignette running time limit by Bioconductor, we only run 200 iterations (`iter = 200`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
