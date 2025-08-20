@@ -28,8 +28,8 @@
 #'
 #' @importFrom methods is
 #' @importFrom S4Vectors DataFrame
-#' @importFrom SummarizedExperiment colData<-
-#' @importFrom SummarizedExperiment rowData<-
+#' @importFrom SummarizedExperiment colData<- colData
+#' @importFrom SummarizedExperiment rowData<- rowData
 #' @importFrom GenomicRanges granges resize
 #' @importFrom GenomicRanges countOverlaps
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment

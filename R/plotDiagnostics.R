@@ -44,10 +44,6 @@ plotDiagnostics <- function(
     model_fit_align = "hv",
     ...) {
 
-  utils::globalVariables(c(
-    "x", "y_pred", "y_pred_2.5", "y_pred_97.5", "y_pred", "density"
-  ))
-
   data_list <- decemedip_output$data_list
   posterior <- decemedip_output$posterior
 
