@@ -15,6 +15,8 @@
 #' the argument `align` in [cowplot::plot_grid] for details.
 #' @param ... Additional arguments to be fed into [cowplot::plot_grid]
 #' in the case of `plot_type = 'model_fit'`.
+#' @importFrom stats quantile
+#' @importFrom ggplot2 xlim
 #'
 #' @return An `ggplot` object.
 #' @export
@@ -41,6 +43,11 @@ plotDiagnostics <- function(
     model_fit_label_size = 12,
     model_fit_align = "hv",
     ...) {
+
+  utils::globalVariables(c(
+    "x", "y_pred", "y_pred_2.5", "y_pred_97.5", "y_pred", "density"
+  ))
+
   data_list <- decemedip_output$data_list
   posterior <- decemedip_output$posterior
 

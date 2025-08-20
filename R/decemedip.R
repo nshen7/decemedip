@@ -42,6 +42,8 @@
 #' for MCMC if it fails to converge.
 #' @param ... Other parameters that can be passed to the `\link[rstan]{sampling}` function.
 #'
+#' @importFrom stats cor quantile
+#' @importFrom utils data
 #' @importFrom SummarizedExperiment assays
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom SummarizedExperiment ncol

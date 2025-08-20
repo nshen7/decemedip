@@ -3,10 +3,12 @@
 #' (https://www.nature.com/articles/s41467-018-07466-6). Used as default in \code{\link{decemedip}}.
 #'
 #'
+#' @docType data
 #' @description This dataset represents a GRanges object that contains the collection
 #' of Illumina HumanMethylation450K probes that have methylation level less than 0.1 or
 #' greater than 0.9 in all tissue present in the atlas. Data source is from the MethAtlas
 #' GitHub repo (\url{https://github.com/nloyfer/meth_atlas}).
+#' @importFrom utils data
 #' @usage data(hg19.ref.anc.se)
 #' @format An object of class \code{GRanges}.
 #'
@@ -25,12 +27,14 @@
 #' (https://www.nature.com/articles/s41467-018-07466-6).
 #'
 #'
+#' @docType data
 #' @description Default reference cell type-specific markers used as default in
 #' \code{\link{decemedip}}. This dataset represents a GRanges object that contains the collection
 #' of Illumina HumanMethylation450K probes that have methylation level less than 0.1 or
 #' greater than 0.9 in all tissue present in the atlas. Data source of the methylation atlas is
 #' from the MethAtlas GitHub repo (https://github.com/nloyfer/meth_atlas). For details
 #' of how the marker CpGs are selected, please refer to the decemedip manuscript.
+#' @importFrom utils data
 #' @usage data(hg19.ref.cts.se)
 #' @format An object of class \code{GRanges}. rowData(hg19.ref.cts.se) contains
 #' information of the selected probes.
@@ -49,10 +53,13 @@
 #' Hg38 genomic information of cell-type-specific marker CpGs inferred from DNA
 #' methylation atlas published by Moss 2018 Nat. Commun.
 #' (https://www.nature.com/articles/s41467-018-07466-6).
+#'
+#' @docType data
 #' @description Same as \code{data(hg19.ref.anc.se)} but lifted over to hg38.
 #' @format An object of class \code{GRanges}.
 #'
 #' @details All coordinates are in hg38.
+#' @importFrom utils data
 #' @usage data(hg38.ref.anc.se)
 #' @format An object of class \code{GRanges}.
 #'
@@ -65,10 +72,13 @@
 #' Hg38 genomic information of cell-type-specific marker CpGs inferred from DNA
 #' methylation atlas published by Moss 2018 Nat. Commun.
 #' (https://www.nature.com/articles/s41467-018-07466-6).
+#'
+#' @docType data
 #' @description Same as \code{data(hg19.ref.cts.se)} but lifted over to hg38.
 #' @format An object of class \code{GRanges}.
 #'
 #' @details All coordinates are in hg38.
+#' @importFrom utils data
 #' @usage data(hg38.ref.cts.se)
 #' @format An object of class \code{GRanges}.
 #'
@@ -80,9 +90,11 @@
 
 #' MeDIP-seq read counts on reference cell type-specific CpGs of 3 PDX samples from Berchuck et al. 2022
 #'
+#' @docType data
 #' @description This dataset represents a \code{SummarizedExperiment} object that contains
 #' MeDIP-seq read counts on reference cell type-specific CpGs of 3 PDX samples from Berchuck
 #' et al. 2022. Each row is a CpG.
+#' @importFrom utils data
 #' @usage data(pdx.counts.cts.se)
 #' @format An object of class \code{SummarizedExperiment}.
 #'
@@ -95,9 +107,11 @@
 
 #' MeDIP-seq read counts on reference anchor CpGs of 3 PDX samples from Berchuck et al. 2022
 #'
+#' @docType data
 #' @description This dataset represents a \code{SummarizedExperiment} object that contains
 #' MeDIP-seq read counts on reference anchor CpGs of 3 PDX samples from Berchuck
 #' et al. 2022. Each row is a CpG.
+#' @importFrom utils data
 #' @usage data(pdx.counts.anc.se)
 #' @format An object of class \code{SummarizedExperiment}.
 #'
