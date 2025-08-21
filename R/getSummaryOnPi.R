@@ -34,11 +34,13 @@ getSummaryOnPi <- function(
     digits_summary = 5,
     cell_type_names = NULL,
     ...) {
+
   if (is.null(cell_type_names)) {
     temp_env <- new.env()
     data(hg19.ref.cts.se, envir = temp_env)
-    cell_type_names <- colnames(hg19.ref.cts.se)
+    cell_type_names <- colnames(temp_env$hg19.ref.cts.se)
   }
+
   smr_pi.df <- rstan::monitor(rstan::extract(posterior, pars = c("pi"), permuted = FALSE),
     probs = probs,
     digits_summary = digits_summary,
