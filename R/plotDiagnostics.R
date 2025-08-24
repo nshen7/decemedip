@@ -72,16 +72,21 @@ plotDiagnostics <- function(
       y_pred_2.5 = matrixStats::colQuantiles(y_sim, probs = 0.025),
       y_pred_97.5 = matrixStats::colQuantiles(y_sim, probs = 0.975)
     ) |>
-      mutate(density = factor(density, labels = paste0("CpG density: ", levels(density))))
-
+      mutate(density = factor(.data[["density"]], labels = paste0("CpG density: ", levels(.data[["density"]]))))
 
     p <- plot.df |>
-      ggplot2::ggplot(ggplot2::aes(x = x)) +
-      ggplot2::geom_ribbon(ggplot2::aes(ymin = y_pred_2.5, ymax = y_pred_97.5), fill = "lightgrey") +
-      ggplot2::geom_linerange(ggplot2::aes(ymin = y, ymax = y_pred), size = 0.5, color = "darkgrey") +
-      ggplot2::geom_point(ggplot2::aes(y = y), size = 0.5, color = "orange2") +
-      ggplot2::geom_point(ggplot2::aes(y = y_pred), size = 0.5) +
-      ggplot2::facet_wrap(~density, scales = "fixed") +
+      ggplot2::ggplot(ggplot2::aes(x = .data$x)) +
+      ggplot2::geom_ribbon(
+        ggplot2::aes(ymin = .data[["y_pred_2.5"]], ymax = .data[["y_pred_97.5"]]),
+        fill = "lightgrey"
+      ) +
+      ggplot2::geom_linerange(
+        ggplot2::aes(ymin = .data$y, ymax = .data$y_pred),
+        size = 0.5, color = "darkgrey"
+      ) +
+      ggplot2::geom_point(ggplot2::aes(y = .data$y), size = 0.5, color = "orange2") +
+      ggplot2::geom_point(ggplot2::aes(y = .data$y_pred), size = 0.5) +
+      ggplot2::facet_wrap(~.data$density, scales = "fixed") +
       ggplot2::theme_classic() +
       ggplot2::scale_x_continuous(breaks = c(0, 0.5, 1), limits = c(0, 1)) +
       ggplot2::xlab("Fractional methylation") +

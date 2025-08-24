@@ -54,7 +54,7 @@ getSummaryOnPi <- function(
   smr_pi.df <- smr_pi.df |>
     as.data.frame() |>
     dplyr::mutate(cell_type = factor(cell_type_names, levels = cell_type_names)) |>
-    dplyr::relocate(cell_type) |>
+    dplyr::relocate(.data[["cell_type"]]) |>
     dplyr::select(1:(7 + length(probs)))
 
   return(smr_pi.df)
