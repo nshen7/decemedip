@@ -26,6 +26,7 @@
 #' reference region in `beta_matrix}. If input is a non-\code{DataFrame` object, it will
 #' be converted to a `DataFrame`. Default is NULL.
 #'
+#' @importFrom rlang .data
 #' @importFrom methods is
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment colData<- colData

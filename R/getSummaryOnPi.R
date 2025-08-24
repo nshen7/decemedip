@@ -9,6 +9,8 @@
 #' should align with order in the reference panel.
 #' @param ... Additional arguments that get passed into `rstan::monitor` function.
 #'
+#' @importFrom rlang .data
+#'
 #' @return A data.frame object containg summary statistics and diagnostic statistics
 #' of the fitted cell type proportions.
 #' @export
