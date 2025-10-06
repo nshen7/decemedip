@@ -7,9 +7,9 @@
 methylation atlas published by Moss 2018 Nat. Commun.
 (https://www.nature.com/articles/s41467-018-07466-6).}
 \format{
-An object of class \code{GRanges}.
+An object of class \code{SummarizedExperiment}.
 
-An object of class \code{GRanges}.
+An object of class \code{SummarizedExperiment}.
 }
 \usage{
 data(hg38.ref.anc.se)

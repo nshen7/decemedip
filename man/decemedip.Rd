@@ -99,15 +99,31 @@ A list of two elements:
 Main function to perform cell type deconvolution with MeDIP-seq data
 }
 \examples{
-data(pdx.counts.cts.se)
-data(pdx.counts.anc.se)
-# read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_cts <- SummarizedExperiment::assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"]
-# read counts of anchor CpGs of the sample 'LuCaP_147CR'
-counts_anc <- SummarizedExperiment::assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
 
-## The following function is commented due to Bioconductor's time constraints on package building
-## Fit decemedip model (iter=100 for demonstration, by default iter=2000)
-# output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc, iter = 100, cores = 1, chains = 1)
+# Here we use a lightweighted example that only contains 8 cell types to avoid long running time:
+
+data(example.hg19.ref.cts.se)
+data(example.hg19.ref.anc.se)
+data(example.pdx.counts.cts.se)
+data(example.pdx.counts.anc.se)
+
+# read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
+counts_cts <- SummarizedExperiment::assays(example.pdx.counts.cts.se)$counts[, "LuCaP_147CR"]
+# read counts of anchor CpGs of the sample 'LuCaP_147CR'
+counts_anc <- SummarizedExperiment::assays(example.pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
+
+## Fit decemedip model
+output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc,
+                    ref_cts = example.hg19.ref.cts.se, ref_anc = example.hg19.ref.anc.se,
+                    iter = 500, cores = 1, chains = 1)
+
+## IMPORTANT NOTE (PLEASE READ): For usual cases, you may skip specifying ref_cts and ref_anc,
+## as the default panels contain 25 cell types, as used in the manuscript, e.g., run the function as:
+\dontrun{
+  ## By default, the functions uses 2000 iterations, 4 cores and 4 chains
+  output <- decemedip(counts_cts = counts_cts, counts_anc = counts_anc)
+  ## or use BAM files as input (paired=TRUE is file is paired-end)
+  output <- decemedip(sample_bam_file = "path/to/bam/files", paired = TRUE)
+}
 
 }

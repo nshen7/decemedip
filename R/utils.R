@@ -10,7 +10,7 @@
 #' GitHub repo (\url{https://github.com/nloyfer/meth_atlas}).
 #' @importFrom utils data
 #' @usage data(hg19.ref.anc.se)
-#' @format An object of class \code{GRanges}.
+#' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @details All coordinates are in hg19.
 #' @references Moss, J., Magenheim, J., Neiman, D. et al. Comprehensive human
@@ -36,7 +36,7 @@
 #' of how the marker CpGs are selected, please refer to the decemedip manuscript.
 #' @importFrom utils data
 #' @usage data(hg19.ref.cts.se)
-#' @format An object of class \code{GRanges}. rowData(hg19.ref.cts.se) contains
+#' @format An object of class \code{SummarizedExperiment}. rowData(hg19.ref.cts.se) contains
 #' information of the selected probes.
 #'
 #' @details All coordinates are in hg19.
@@ -56,12 +56,12 @@
 #'
 #' @docType data
 #' @description Same as \code{data(hg19.ref.anc.se)} but lifted over to hg38.
-#' @format An object of class \code{GRanges}.
+#' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @details All coordinates are in hg38.
 #' @importFrom utils data
 #' @usage data(hg38.ref.anc.se)
-#' @format An object of class \code{GRanges}.
+#' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @examples
 #' data(hg38.ref.anc.se)
@@ -75,12 +75,12 @@
 #'
 #' @docType data
 #' @description Same as \code{data(hg19.ref.cts.se)} but lifted over to hg38.
-#' @format An object of class \code{GRanges}.
+#' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @details All coordinates are in hg38.
 #' @importFrom utils data
 #' @usage data(hg38.ref.cts.se)
-#' @format An object of class \code{GRanges}.
+#' @format An object of class \code{SummarizedExperiment}.
 #'
 #' @examples
 #' data(hg38.ref.cts.se)
@@ -121,3 +121,54 @@
 #' data(pdx.counts.anc.se)
 #' pdx.counts.anc.se
 "pdx.counts.anc.se"
+
+
+#' Subset of hg19.ref.anc.se as a lightweighted example
+#' @docType data
+#' @description Subset of hg19.ref.anc.se as a lightweighted example, only
+#' contains the blood cell types and prostate.
+#' @importFrom utils data
+#' @usage data(example.hg19.ref.anc.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+"example.hg19.ref.anc.se"
+
+#' Subset of hg19.ref.cts.se as a lightweighted example
+#' @docType data
+#' @description Subset of hg19.ref.cts.se as a lightweighted example, only
+#' contains the blood cell types and prostate.
+#' @importFrom utils data
+#' @usage data(example.hg19.ref.cts.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+"example.hg19.ref.cts.se"
+
+
+#' Subset of pdx.counts.anc.se as a lightweighted example
+#'
+#' @docType data
+#' @description Subset of pdx.counts.anc.se as a lightweighted example, only
+#' contains the blood cell types and prostate.
+#' @importFrom utils data
+#' @usage data(example.pdx.counts.anc.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+"example.pdx.counts.anc.se"
+
+
+
+#' Subset of pdx.counts.cts.se as a lightweighted example
+#'
+#' @docType data
+#' @description Subset of pdx.counts.cts.se as a lightweighted example, only
+#' contains the blood cell types and prostate.
+#' @importFrom utils data
+#' @usage data(example.pdx.counts.cts.se)
+#' @format An object of class \code{SummarizedExperiment}.
+#'
+#' @details All coordinates are in hg19.
+"example.pdx.counts.cts.se"
+

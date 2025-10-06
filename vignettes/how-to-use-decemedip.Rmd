@@ -61,7 +61,7 @@ Cell-free and bulk DNA methylation data obtained through MeDIP-seq reflect a mix
 decemedip couples a logit-normal model with a generalize additive model (GAM) framework. For each site $i \in \{1, ..., N\}$ in the reference panel, the input to the model is the fractional methylation levels $x_{ik}$ for each cell type $k \in \{1, ..., K\}$, the CpG density level $z_i$ and the MeDIP-seq read count $y_i$, where $K$ is the total number of cell types. A unit simplex variable that follows a logit-normal prior, $\boldsymbol{\pi} = (\pi_1, ..., \pi_K)$ where $\pi_k > 0, \sum_{k=1}^K \pi_k = 1$, is included to describe the proportions of cell types in the reference panel while taking into account the correlations between these cell types.
 
 ```{r, fig.retina = NULL, fig.align='center', fig.wide = TRUE, echo=FALSE}
-knitr::include_graphics(system.file("figures/method_main_figure.png", package = "decemedip"), dpi = 300)
+# knitr::include_graphics(system.file("figures/method_main_figure.png", package = "decemedip"), dpi = 300)
 ```
 
 # Input Data
@@ -121,32 +121,37 @@ PS: By default, the `decemedip()` function uses a hg19 reference panel. But user
 
 ## Input with read counts
 
-We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the @berchuck2022detecting study, `pdx.counts.cts.se` and `pdx.counts.anc.se`, to demonstrate the output and diagnostics in this vignette. 
+We use built-in objects of the package that contains read counts of the prostate tumor patient-derived xenograft (PDX) samples from the @berchuck2022detecting study to demonstrate the output and diagnostics in this vignette. 
+
+Note that in this example, we use only a subset of the cell types from the default reference panel to reduce the build time of the vignette. Only blood cells and prostate are included.
 
 ```{r}
-data(pdx.counts.cts.se)
-data(pdx.counts.anc.se)
+data(example.hg19.ref.cts.se)
+data(example.hg19.ref.anc.se)
+
+data(example.pdx.counts.cts.se)
+data(example.pdx.counts.anc.se)
 ```
 
 We extract the sample `LuCaP_147CR` from this example dataset for follwing illustration:
 ```{r}
 # read counts of cell type-specific CpGs of the sample 'LuCaP_147CR'
-counts_cts <- assays(pdx.counts.cts.se)$counts[, "LuCaP_147CR"]
+counts_cts <- assay(example.pdx.counts.cts.se)[, "LuCaP_147CR"]
 # read counts of anchor CpGs of the sample 'LuCaP_147CR'
-counts_anc <- assays(pdx.counts.anc.se)$counts[, "LuCaP_147CR"]
+counts_anc <- assay(example.pdx.counts.anc.se)[, "LuCaP_147CR"]
 ```
 
-Due to the vignette running time limit by Bioconductor, we only run 200 iterations (`iter = 200`) for the purpose of demonstration, which causes the warning of `Bulk Effective Samples Size (ESS) is too low`. In regular cases, we recommend to run 2000 iterations (the default), or at least 1000 iterations for a stable posterior inference. 
+Due to the vignette running time limit by Bioconductor, we only run 500 iterations (`iter = 500`) for the purpose of demonstration, which causes the warning of effective Samples Size (ESS) being too low. In regular cases, we recommend to run 2000 iterations (the default) for a stable posterior inference. 
 
-```{r warning=FALSE, eval=FALSE}
-## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
-
+```{r eval=TRUE}
 output <- decemedip(
   counts_cts = counts_cts,
   counts_anc = counts_anc,
+  ref_cts = example.hg19.ref.cts.se,
+  ref_anc = example.hg19.ref.anc.se,
   diagnostics = TRUE,
   cores = 4,
-  iter = 200
+  iter = 500
 )
 ```
 
@@ -168,10 +173,9 @@ library(rstan)
 
 Extract the fitted posterior of cell type proportions ($\boldsymbol\pi$): 
 
-```{r eval=FALSE}
-## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
-
-smr_pi.df <- getSummaryOnPi(output$posterior)
+```{r eval=TRUE}
+smr_pi.df <- getSummaryOnPi(output$posterior, cell_type_names = colnames(example.hg19.ref.cts.se))
+print(smr_pi.df)
 ```
 
 + Columns in the `smr_pi.df`:
@@ -188,9 +192,7 @@ smr_pi.df <- getSummaryOnPi(output$posterior)
   
 Plotting out the fitted cell type proportions with credible intervals:
 
-```{r, fig.fullwidth=TRUE, warning=FALSE, eval=FALSE}
-## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
-
+```{r, fig.fullwidth=TRUE, warning=FALSE, eval=TRUE}
 labels <- gsub("_", " ", smr_pi.df$cell_type)
 labels <- gsub("(.*) EPIC", "\\1", labels)
 
@@ -219,9 +221,7 @@ smr_pi.df |>
 Note that this plot is only accessible when `diagnostics` is set to`TRUE` in the `decemedip()` function. 
 The actual \gls*{MeDIP-seq} read counts (orange) and the fitted counts predicted by the GAM component (black) are shown in the figure across varying levels of CpG density. Grey area represents the 95\% credible intervals of the predicted counts. `CpG density: x' means that there are x CpGs in the 100-bp window surrounding the CpG.
 
-```{r, fig.fullwidth=TRUE, warning=FALSE, eval=FALSE}
-## THIS CHUNK HAS NOT BEEN RUN IN THIS VIGNETTE DUE TO TIME CONSTRAINT
-
+```{r, fig.fullwidth=TRUE, warning=FALSE, eval=TRUE}
 plotDiagnostics(output, plot_type = "y_fit") +
   ylim(0, 300)
 ```
