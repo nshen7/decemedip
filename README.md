@@ -25,4 +25,4 @@ If you have questions or suggestions regarding the decemedip package, please fee
 
 ## Citation
 
-Manuscript is currently under development.
+Shen, Ning, et al. "decemedip: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylomes." bioRxiv (2025): 2025-05.
