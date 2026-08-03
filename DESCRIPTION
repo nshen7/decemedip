@@ -1,9 +1,9 @@
 Package: decemedip
 Title: hierarchical Bayesian modeling for cell type deconvolution of immunoprecipitation-based DNA methylome
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: 
-    person("Ning", "Shen", , "ning.shen.wk@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-2974-1086"))
+    person("Keegan", "Korthauer", , "kkorthauer@cmmt.ubc.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4565-1654"))
 Description: The R package decemedip is a novel computational paradigm developed
   for inferring the relative abundances of cell types and tissues measure by 
   methylated DNA immunoprecipitation sequencing (MeDIP-Seq). This paradigm 
